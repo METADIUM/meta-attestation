@@ -1,0 +1,9 @@
+/node_modules
+/firebase-debug.log
+/src/firebase-config.json
+/.firebaserc
+/public/bundle.css
+/public/bundle.css.map
+/public/bundle.js
+/public/bundle.js.map
+
