@@ -1,4 +1,4 @@
-# Meta attestation - Example app
+# Meta attestation
 
 > This is a sample app showing a usage of the react-firebaseui package in a react app using Webpack and CSS modules.
 
