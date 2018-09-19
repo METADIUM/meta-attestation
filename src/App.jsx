@@ -41,7 +41,7 @@ class App extends React.Component {
     signInFlow: 'popup',
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      //firebase.auth.EmailAuthProvider.PROVIDER_ID,
     ],
     callbacks: {
       signInSuccessWithAuthResult: () => false,
@@ -65,7 +65,6 @@ class App extends React.Component {
   componentDidMount() {
     this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
       this.setState({isSignedIn: !!user});
-      console.log('user!!!', user);
     });
   }
 
@@ -76,17 +75,21 @@ class App extends React.Component {
     this.unregisterAuthObserver();
   }
 
-  sendSignInLinkToEmail(email) {
-    firebase.auth().sendSignInLinkToEmail(email, this.actionCodeSettings)
+  sendSignInLinkToEmail() {
+    var email = document.getElementById('email');
+    if (! email.value) {
+      return;
+    }
+
+    firebase.auth().sendSignInLinkToEmail(email.value, this.actionCodeSettings)
       .then(function() {
         // The link was successfully sent. Inform the user.
         // Save the email locally so you don't need to ask the user for it again
         // if they open the link on the same device.
-        window.localStorage.setItem('emailForSignIn', email);
+        window.localStorage.setItem('emailForSignIn', email.value);
       })
       .catch(function(error) {
         // Some error occurred, you can inspect the code: error.code
-        console.log(error);
       });
   }
 
@@ -95,7 +98,6 @@ class App extends React.Component {
     if (! firebase.auth().isSignInWithEmailLink(window.location.href)) {
       return;
     }
-    console.log('CHECK emailForSignIn');
     // Additional state parameters can also be passed via URL.
     // This can be used to continue the user's intended action before triggering
     // the sign-in operation.
@@ -138,7 +140,7 @@ class App extends React.Component {
     return (
       <div className={styles.container}>
         <div className={styles.logo}>
-          <i className={styles.logoIcon + ' material-icons'}>photo</i> My App
+          <i className={styles.logoIcon + ' material-icons'}>photo</i> Meta Attestation
         </div>
         <div className={styles.caption}>This is a cool demo app</div>
         {this.state.isSignedIn !== undefined && !this.state.isSignedIn &&
@@ -148,6 +150,10 @@ class App extends React.Component {
               uiConfig={this.uiConfig}
               firebaseAuth={firebaseApp.auth()}
             />
+            <center>
+              <input type="text" id="email" placeholder="Put your email" />
+              <button type="button" onClick={() => this.sendSignInLinkToEmail()}>Sign in with Email link</button>
+            </center>
           </div>
         }
         {this.state.isSignedIn &&
