@@ -27,6 +27,9 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import styles from './app.css'; // This uses CSS modules.
 import './firebaseui-styling.global.css'; // Import globally.
 
+// Web3
+import Web3 from 'web3';
+
 // Get the Firebase config from the auto generated file.
 const firebaseConfig = require('./firebase-config.json').result;
 
@@ -122,6 +125,11 @@ class App extends React.Component {
    * @inheritDoc
    */
   componentWillMount() {
+    if(typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
+      this.web3 = new Web3(window.web3.currentProvider);
+    }
+
+    // For manual phone sign-in
     /*
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
       'size': 'invisible',
