@@ -60,22 +60,6 @@ class App extends React.Component {
     'handleCodeInApp': true // This must be true.
   };
 
-  /**
-   * @inheritDoc
-   */
-  componentDidMount() {
-    this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
-      this.setState({isSignedIn: !!user});
-    });
-  }
-
-  /**
-   * @inheritDoc
-   */
-  componentWillUnmount() {
-    this.unregisterAuthObserver();
-  }
-
   sendSignInLinkToEmail() {
     var email = document.getElementById('email');
     if (! email.value) {
@@ -129,9 +113,28 @@ class App extends React.Component {
       });
   }
 
+  sendSignInWithPhone() {
+  }
+
   constructor() {
     super();
     this.isSignInWithEmailLink();
+  }
+
+  /**
+   * @inheritDoc
+   */
+  componentDidMount() {
+    this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
+      this.setState({isSignedIn: !!user});
+    });
+  }
+
+  /**
+   * @inheritDoc
+   */
+  componentWillUnmount() {
+    this.unregisterAuthObserver();
   }
 
   /**
@@ -154,6 +157,11 @@ class App extends React.Component {
             <center>
               <input type="text" id="email" placeholder="Put your email" />
               <button type="button" onClick={() => this.sendSignInLinkToEmail()}>Sign in with Email link</button>
+            </center>
+            <p />
+            <center>
+              <input type="text" id="phone" placeholder="Put your phone number" />
+              <button type="button" onClick={() => this.sendSignInWithPhone()}>Sign in with Phone number</button>
             </center>
           </div>
         }
