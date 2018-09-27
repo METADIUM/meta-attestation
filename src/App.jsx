@@ -41,8 +41,8 @@ class App extends React.Component {
     signInFlow: 'popup',
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      //firebase.auth.EmailAuthProvider.PROVIDER_ID,
       firebase.auth.GithubAuthProvider.PROVIDER_ID,
+      firebase.auth.PhoneAuthProvider.PROVIDER_ID,
     ],
     callbacks: {
       signInSuccessWithAuthResult: () => false,
@@ -113,12 +113,28 @@ class App extends React.Component {
       });
   }
 
-  sendSignInWithPhone() {
-  }
-
   constructor() {
     super();
     this.isSignInWithEmailLink();
+  }
+
+  /**
+   * @inheritDoc
+   */
+  componentWillMount() {
+    /*
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
+      'size': 'invisible',
+      'callback': function(response) {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+        onSignInSubmit();
+      }
+    });
+
+    window.recaptchaVerifier.render().then(function(widgetId) {
+      window.recaptchaWidgetId = widgetId;
+    });
+    */
   }
 
   /**
@@ -157,11 +173,6 @@ class App extends React.Component {
             <center>
               <input type="text" id="email" placeholder="Put your email" />
               <button type="button" onClick={() => this.sendSignInLinkToEmail()}>Sign in with Email link</button>
-            </center>
-            <p />
-            <center>
-              <input type="text" id="phone" placeholder="Put your phone number" />
-              <button type="button" onClick={() => this.sendSignInWithPhone()}>Sign in with Phone number</button>
             </center>
           </div>
         }
