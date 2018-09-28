@@ -29,7 +29,8 @@ import './firebaseui-styling.global.css'; // Import globally.
 
 // Web3
 import Web3 from 'web3';
-const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io'));
+import web3config from './web3-config.json';
+const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
 
 // Get the Firebase config from the auto generated file.
 const firebaseConfig = require('./firebase-config.json').result;
