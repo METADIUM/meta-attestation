@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "cryptiles": "^4.1.2",
+    "ethereumjs-tx": "^1.3.7",
     "firebase": "^5.5.1",
     "macaddress": "^0.2.9",
     "react": "^16.3.2",

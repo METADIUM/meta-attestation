@@ -18,25 +18,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// Firebase.
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-
 // Styles
 import styles from './app.css'; // This uses CSS modules.
 import './firebaseui-styling.global.css'; // Import globally.
 
-// Web3
-import Web3 from 'web3';
-import web3config from './web3-config.json';
-const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
+// Firebase.
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 // Get the Firebase config from the auto generated file.
 const firebaseConfig = require('./firebase-config.json').result;
 
 // Instantiate a Firebase app.
 const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+// Web3
+import Web3 from 'web3';
+import web3config from './web3-config.json';
+const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
+
+// Transaction
+const Tx = require('ethereumjs-tx');
 
 /**
  * The Splash Page containing the login UI.
