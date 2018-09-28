@@ -29,6 +29,7 @@ import './firebaseui-styling.global.css'; // Import globally.
 
 // Web3
 import Web3 from 'web3';
+const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io'));
 
 // Get the Firebase config from the auto generated file.
 const firebaseConfig = require('./firebase-config.json').result;
@@ -125,10 +126,6 @@ class App extends React.Component {
    * @inheritDoc
    */
   componentWillMount() {
-    if(typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
-      this.web3 = new Web3(window.web3.currentProvider);
-    }
-
     // For manual phone sign-in
     /*
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
@@ -161,6 +158,10 @@ class App extends React.Component {
     this.unregisterAuthObserver();
   }
 
+  test() {
+    console.log(web3.version.network);
+  }
+
   /**
    * @inheritDoc
    */
@@ -181,6 +182,10 @@ class App extends React.Component {
             <center>
               <input type="text" id="email" placeholder="Put your email" />
               <button type="button" onClick={() => this.sendSignInLinkToEmail()}>Sign in with Email link</button>
+            </center>
+            <p />
+            <center>
+              <button type="button" onClick={() => this.test()}>TEST</button>
             </center>
           </div>
         }
