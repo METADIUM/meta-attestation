@@ -68,6 +68,37 @@ class App extends React.Component {
     'handleCodeInApp': true // This must be true.
   };
 
+  // Signs the given transaction data and sends it. Abstracts some of the details 
+  // of buffering and serializing the transaction for web3.
+  sendSigned(txData, cb) {
+    const privateKey = new Buffer(web3config.privkey, 'hex');
+    const transaction = new Tx(txData);
+    transaction.sign(privateKey);
+    const serializedTx = transaction.serialize().toString('hex');
+    web3.eth.sendSignedTransaction('0x' + serializedTx, cb);
+  }
+
+  test() {
+    console.log(web3.version.network);
+    web3.eth.getTransactionCount(web3config.addr).then(txCount => {
+      // construct the transaction data
+      const txData = {
+        nonce: web3.utils.toHex(txCount),
+        gasLimit: web3.utils.toHex(25000),
+        gasPrice: web3.utils.toHex(10e9), // 10 Gwei
+        to: web3config.claim,
+        from: web3config.addr,
+        value: web3.utils.toHex(web3.utils.toWei(0, 'wei'))
+      }
+    
+      // fire away!
+      sendSigned(txData, function(err, result) {
+        if (err) return console.log('error', err)
+        console.log('sent', result)
+      });
+    });
+  }
+
   sendSignInLinkToEmail() {
     var email = document.getElementById('email');
     if (! email.value) {
@@ -160,10 +191,6 @@ class App extends React.Component {
    */
   componentWillUnmount() {
     this.unregisterAuthObserver();
-  }
-
-  test() {
-    console.log(web3.version.network);
   }
 
   /**
