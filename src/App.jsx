@@ -34,9 +34,8 @@ const firebaseConfig = require('./firebase-config.json').result;
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 // Web3
-import Web3 from 'web3';
-import web3config from './web3-config.json';
-const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
+import web3 from '../ethereum/web3';
+import web3config from '../ethereum/web3-config.json';
 
 // Transaction
 const Tx = require('ethereumjs-tx');
