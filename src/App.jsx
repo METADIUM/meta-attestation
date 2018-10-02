@@ -81,18 +81,18 @@ class App extends React.Component {
   test() {
     console.log(web3.version.network);
     web3.eth.getTransactionCount(web3config.addr).then(txCount => {
-      // construct the transaction data
+      // Construct the transaction data
       const txData = {
         nonce: web3.utils.toHex(txCount),
         gasLimit: web3.utils.toHex(25000),
         gasPrice: web3.utils.toHex(10e9), // 10 Gwei
         to: web3config.claim,
         from: web3config.addr,
-        value: web3.utils.toHex(web3.utils.toWei(0, 'wei'))
+        value: web3.utils.toHex(web3.utils.toWei('0.01', 'ether'))
       }
     
-      // fire away!
-      sendSigned(txData, function(err, result) {
+      // Fire away
+      this.sendSigned(txData, function(err, result) {
         if (err) return console.log('error', err)
         console.log('sent', result)
       });
