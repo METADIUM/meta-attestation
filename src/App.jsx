@@ -78,7 +78,6 @@ class App extends React.Component {
   }
 
   test() {
-    console.log(web3.version.network);
     web3.eth.getTransactionCount(web3config.addr).then(txCount => {
       // Construct the transaction data
       const txData = {

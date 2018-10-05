@@ -1,4 +1,11 @@
 import Web3 from 'web3';
+/**
+ * web3-config.json includes:
+ *   - url
+ *   - addr
+ *   - privkey
+ *   - claim
+ */
 import web3config from './web3-config.json';
 
 const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
