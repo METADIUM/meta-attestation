@@ -21,6 +21,7 @@ import ReactDOM from 'react-dom';
 // Styles
 import styles from './app.css'; // This uses CSS modules.
 import './firebaseui-styling.global.css'; // Import globally.
+import logo from '../public/images/logo.png';
 
 // Firebase.
 import firebase from 'firebase/app';
@@ -198,9 +199,9 @@ class App extends React.Component {
     return (
       <div className={styles.container}>
         <div className={styles.logo}>
-          <i className={styles.logoIcon + ' material-icons'}>photo</i> Meta Attestation
+          {/* <i className={styles.logoIcon + ' material-icons'}>photo</i> Meta Attestation */}
+          <img className={styles.logoIcon} src={logo}/>
         </div>
-        <div className={styles.caption}>This is a cool demo app</div>
         {this.state.isSignedIn !== undefined && !this.state.isSignedIn &&
           <div>
             <StyledFirebaseAuth

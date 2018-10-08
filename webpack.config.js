@@ -82,6 +82,10 @@ const config = {
             ],
           }),
       },
+      {
+        test: /\.png$/,
+        loader: 'file-loader'
+      },
     ],
   },
 };
