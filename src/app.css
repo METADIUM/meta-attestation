@@ -42,8 +42,8 @@
 }
 .logoIcon {
   top: 4px;
+  width: 30%;
   font-size: 32px;
-  margin-right: -2px;
   position: relative;
 }
 .caption {

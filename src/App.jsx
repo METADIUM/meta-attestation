@@ -200,7 +200,7 @@ class App extends React.Component {
       <div className={styles.container}>
         <div className={styles.logo}>
           {/* <i className={styles.logoIcon + ' material-icons'}>photo</i> Meta Attestation */}
-          <img className={styles.logoIcon} src={logo}/>
+          <center><img className={styles.logoIcon} src={logo}/></center>
         </div>
         {this.state.isSignedIn !== undefined && !this.state.isSignedIn &&
           <div>
