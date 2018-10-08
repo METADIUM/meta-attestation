@@ -15,7 +15,7 @@ constants.minBallotDurationInDays = 2
 constants.startTimeOffsetInMinutes = 5
 constants.endTimeDefaultInMinutes = 2890
 constants.getTransactionReceiptInterval = 5000
-constants.NETID_TEST = '101'
+constants.NETID_TESTNET = '101'
 module.exports = {
   constants
 }
