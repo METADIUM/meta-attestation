@@ -85,7 +85,7 @@ class App extends React.Component {
         nonce: web3.utils.toHex(txCount),
         gasLimit: web3.utils.toHex(25000),
         gasPrice: web3.utils.toHex(10e9), // 10 Gwei
-        to: web3config.claim,
+        to: web3config.identity,
         from: web3config.addr,
         value: web3.utils.toHex(web3.utils.toWei('0.01', 'ether'))
       }

@@ -13,6 +13,7 @@ async function getContractsAddresses(branch) {
   }
 
   let contracts = await response.json()
+  console.log('contracts', contracts);
 
   switch (branch) {
     case 'testnet':
@@ -33,7 +34,7 @@ function getAddresses(netId) {
   }
 }
 
-module.exports = {
+export {
   getContractsAddresses,
-  networkAddresses: getAddresses
+  getAddresses
 }

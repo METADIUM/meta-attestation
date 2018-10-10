@@ -36,7 +36,7 @@ function getBranch(netId) {
   }
 }
 
-module.exports = {
+export {
   addressesURL,
   ABIURL,
   getABI,
