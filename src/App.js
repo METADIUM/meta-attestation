@@ -45,13 +45,7 @@ const Tx = require('ethereumjs-tx');
 
 // Contracts.
 import { getContractsAddresses } from './ethereum/contracts/addresses';
-
-// var identityManager;
-// async function initContracts() {
-//   await getContractsAddresses(web3config.netid);
-//   identityManager = new IdentityManager();
-//   await identityManager.init();
-// }
+import IdentityManager from './ethereum/contracts/IdentityManager.contract';
 
 /**
  * The Splash Page containing the login UI.
@@ -168,10 +162,18 @@ class App extends React.Component {
     this.isSignInWithEmailLink();
   }
 
+  async initContracts() {
+    await getContractsAddresses(web3config.netid);
+    this.identityManager = new IdentityManager();
+    await this.identityManager.init();
+  }
+
   /**
    * @inheritDoc
    */
   componentWillMount() {
+    this.initContracts();
+
     // For manual phone sign-in
     /*
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
