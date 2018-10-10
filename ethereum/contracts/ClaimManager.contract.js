@@ -4,6 +4,7 @@ import helpers from './helpers';
 
 export default class ClaimManager {
   async init({ netId }) {
+    if (netId == undefined || netId == '') netId = web3config.netid;
     const branch = helpers.getBranch(netId);
 
     const claimManagerAbi = await helpers.getABI(branch, 'ClaimManager');
