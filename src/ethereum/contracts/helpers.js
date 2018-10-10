@@ -1,6 +1,6 @@
-import { constants } from '../constants'
-import { messages } from '../messages'
-import swal from 'sweetalert2'
+import { constants } from '../constants';
+import { messages } from '../messages';
+import swal from 'sweetalert2';
 
 function addressesURL(branch) {
   const URL = `https://raw.githubusercontent.com/${constants.organization}/${constants.repoName}/${branch}/${
@@ -25,6 +25,7 @@ function getABI(branch, contract) {
 
 function wrongRepoAlert(addr) {
   swal('Error!', messages.wrongRepo(addr), 'error')
+  //console.log('Error!', messages.wrongRepo(addr));
 }
 
 function getBranch(netId) {

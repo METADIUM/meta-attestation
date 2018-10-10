@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import 'babel-polyfill';
+
 // React core.
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -34,12 +36,22 @@ const firebaseConfig = require('./firebase-config.json').result;
 // Instantiate a Firebase app.
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-// Web3
-import web3 from '../ethereum/web3';
-import web3config from '../ethereum/web3-config.json';
+// Web3.
+import web3 from './ethereum/web3';
+import web3config from './ethereum/web3-config.json';
 
-// Transaction
+// Transaction.
 const Tx = require('ethereumjs-tx');
+
+// Contracts.
+import { getContractsAddresses } from './ethereum/contracts/addresses';
+
+// var identityManager;
+// async function initContracts() {
+//   await getContractsAddresses(web3config.netid);
+//   identityManager = new IdentityManager();
+//   await identityManager.init();
+// }
 
 /**
  * The Splash Page containing the login UI.

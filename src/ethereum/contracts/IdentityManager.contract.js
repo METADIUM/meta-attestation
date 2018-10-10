@@ -1,16 +1,15 @@
 import web3 from '../web3';
 import web3config from '../web3-config.json';
 import { getAddresses } from './addresses';
-import helpers from './helpers';
+import { getBranch, getABI } from './helpers';
 
 export default class IdentityManager {
-  async init({ netId }) {
-    if (netId == undefined || netId == '') netId = web3config.netid;
-    const { IDENTITY_MANAGER_ADDRESS } = getAddresses(netId);
+  async init() {
+    const { IDENTITY_MANAGER_ADDRESS } = getAddresses(web3config.netid);
     console.log('Identity Manager address', IDENTITY_MANAGER_ADDRESS);
-    const branch = helpers.getBranch(netId);
+    const branch = getBranch(web3config.netid);
 
-    const identityManagerAbi = await helpers.getABI(branch, 'IdentityManager');
+    const identityManagerAbi = await getABI(branch, 'IdentityManager');
     this.identityManagerInstance = new web3.eth.Contract(identityManagerAbi, IDENTITY_MANAGER_ADDRESS);
   }
 }

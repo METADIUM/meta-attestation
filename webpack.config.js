@@ -15,13 +15,14 @@
  */
 'use strict';
 
+require('babel-polyfill');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
   context: __dirname,
 
-  entry: './src/App.jsx',
+  entry: './src/App.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, './public'),
@@ -39,10 +40,14 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.js?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
-        include: path.resolve(__dirname, './src'),
+        include: [
+          path.resolve(__dirname, './src'),
+          path.resolve(__dirname, './src/ethereum'),
+          path.resolve(__dirname, './src/ethereum/contracts')
+        ],
       },
       {
         test: /\.css$/,

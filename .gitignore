@@ -1,8 +1,8 @@
 /node_modules
 /firebase-debug.log
 /src/firebase-config.json
-/ethereum/web3-config.json
-/ethereum/build/
+/src/ethereum/web3-config.json
+/src/ethereum/build/
 /.firebaserc
 /public/bundle.css
 /public/bundle.css.map

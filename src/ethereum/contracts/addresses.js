@@ -1,5 +1,5 @@
-import { constants } from '../constants'
-import { addressesURL, wrongRepoAlert } from './helpers'
+import { constants } from '../constants';
+import { addressesURL, wrongRepoAlert } from './helpers';
 
 let TESTNET_ADDRESSES = {}
 
