@@ -1,6 +1,6 @@
 # Meta attestation
 
-> This is a sample app showing a usage of the react-firebaseui package in a react app using Webpack and CSS modules.
+> Attestation sample based on ERC725 and ERC735
 
 ## Initial setup, building and serving.
 
