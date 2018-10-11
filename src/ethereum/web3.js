@@ -17,7 +17,7 @@ const ethUtil = require('ethereumjs-util');
 const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
 
 function sign(msg) {
-  let hash = ethUtil.hashPersonalMessage(new Buffer(msg, 'hex'));
+  const hash = ethUtil.hashPersonalMessage(new Buffer(msg, 'hex'));
   return ethUtil.ecsign(hash, privateKey, web3.version.network);
 }
 
@@ -41,7 +41,7 @@ function sendTransaction(to, data) {
       to: to,
       data: data
       //value: web3.utils.toHex(web3.utils.toWei('0.01', 'ether'))
-    } 
+    }
 
     // Fire away
     sendSigned(txData, function(err, result) {

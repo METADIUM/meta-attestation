@@ -11,6 +11,7 @@ export default class Identity {
   }
 
   /**
+   * @param {addr} string
    * @param {topic} uint256
    * @param {scheme} uint256
    * @param {data} bytes
@@ -18,9 +19,9 @@ export default class Identity {
    * @param {uri} string
    */
   addClaim({ addr, topic, scheme, uri }) {
-    let data = 'data';
-    let { r, s, v } = sign(data);
-    let signature = Buffer.concat([new Buffer(r), new Buffer(s), new Buffer(v)]);
+    const data = 'data';
+    const { r, s, v } = sign(data);
+    const signature = Buffer.concat([new Buffer(r), new Buffer(s), new Buffer(v)]);
     return this.identityInstance.methods.addClaim(topic, scheme, web3config.addr, signature, new Buffer(data, 'hex'), uri).encodeABI();
   }
 }
