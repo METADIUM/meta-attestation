@@ -1,15 +1,15 @@
 import { constants } from '../constants';
 import { addressesURL, wrongRepoAlert } from './helpers';
 
-let TESTNET_ADDRESSES = {}
+let TESTNET_ADDRESSES = {};
 
 async function getContractsAddresses(branch) {
-  let addr = addressesURL(branch)
-  let response
+  let addr = addressesURL(branch);
+  let response;
   try {
-    response = await fetch(addr)
+    response = await fetch(addr);
   } catch (e) {
-    return wrongRepoAlert(addr)
+    return wrongRepoAlert(addr);
   }
 
   let contracts = await response.json()
@@ -17,20 +17,20 @@ async function getContractsAddresses(branch) {
 
   switch (branch) {
     case 'testnet':
-      TESTNET_ADDRESSES = contracts
-      break
+      TESTNET_ADDRESSES = contracts;
+      break;
     default:
-      TESTNET_ADDRESSES = contracts
-      break
+      TESTNET_ADDRESSES = contracts;
+      break;
   }
 }
 
 function getAddresses(netId) {
   switch (netId) {
     case constants.NETID_TESTNET:
-      return TESTNET_ADDRESSES
+      return TESTNET_ADDRESSES;
     default:
-      return TESTNET_ADDRESSES
+      return TESTNET_ADDRESSES;
   }
 }
 

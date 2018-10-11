@@ -24,8 +24,7 @@ function getABI(branch, contract) {
 }
 
 function wrongRepoAlert(addr) {
-  swal('Error!', messages.wrongRepo(addr), 'error')
-  //console.log('Error!', messages.wrongRepo(addr));
+  swal('Error!', messages.wrongRepo(addr), 'error');
 }
 
 function getBranch(netId) {
