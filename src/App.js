@@ -77,7 +77,7 @@ class App extends React.Component {
       return;
     }
 
-    sendTransaction(web3config.identity, this.identity.addClaim({
+    sendTransaction(addr, this.identity.addClaim({
       addr: addr,
       topic: 1,
       scheme: 2,

@@ -32,20 +32,20 @@ function sendSigned(txData, cb) {
 
 function sendTransaction(to, data) {
   web3.eth.getTransactionCount(web3config.addr).then(txCount => {
-  // Construct the transaction data
-  const txData = {
-    nonce: web3.utils.toHex(txCount),
-    gasLimit: web3.utils.toHex(40e3),
-    gasPrice: web3.utils.toHex(10e9), // 10 Gwei
-    from: web3config.addr,
-    to: to,
-    data: data
-    //value: web3.utils.toHex(web3.utils.toWei('0.01', 'ether'))
-  }
+    // Construct the transaction data
+    const txData = {
+      nonce: web3.utils.toHex(txCount),
+      gasLimit: web3.utils.toHex(40e3),
+      gasPrice: web3.utils.toHex(10e9), // 10 Gwei
+      from: web3config.addr,
+      to: to,
+      data: data
+      //value: web3.utils.toHex(web3.utils.toWei('0.01', 'ether'))
+    } 
 
-  // Fire away
-  sendSigned(txData, function(err, result) {
-    if (err) return console.log('error', err)
+    // Fire away
+    sendSigned(txData, function(err, result) {
+      if (err) return console.log('error', err);
       console.log('sent', result)
     });
   });

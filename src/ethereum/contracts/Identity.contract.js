@@ -5,7 +5,9 @@ import { getBranch, getABI } from './helpers';
 export default class Identity {
   async init() {
     const branch = getBranch(web3config.netid);
+
     this.identityAbi = await getABI(branch, 'Identity');
+    this.identityInstance = new web3.eth.Contract(this.identityAbi.abi, web3config.addr);
   }
 
   /**
@@ -17,8 +19,8 @@ export default class Identity {
    */
   addClaim({ addr, topic, scheme, uri }) {
     let data = 'data';
-    let signature = sign(data);
-    const identityInstance = new web3.eth.Contract(this.identityAbi.abi, addr);
-    return identityInstance.methods.addClaim(topic, scheme, web3config.addr, signature, new Buffer(data, 'hex'), uri).encodeABI();
+    let { r, s, v } = sign(data);
+    let signature = Buffer.concat([new Buffer(r), new Buffer(s), new Buffer(v)]);
+    return this.identityInstance.methods.addClaim(topic, scheme, web3config.addr, signature, new Buffer(data, 'hex'), uri).encodeABI();
   }
 }
