@@ -7,6 +7,6 @@ export default class Identity {
     const branch = getBranch(web3config.netid);
 
     const identityAbi = await getABI(branch, 'Identity');
-    this.identityInstance = new web3.eth.Contract(identityAbi, web3config.identity);
+    this.identityInstance = new web3.eth.Contract(identityAbi.abi, web3config.identity);
   }
 }

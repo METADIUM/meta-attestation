@@ -45,7 +45,7 @@ const Tx = require('ethereumjs-tx');
 
 // Contracts.
 import { getContractsAddresses } from './ethereum/contracts/addresses';
-import IdentityManager from './ethereum/contracts/IdentityManager.contract';
+import Identity from './ethereum/contracts/Identity.contract';
 
 /**
  * The Splash Page containing the login UI.
@@ -157,15 +157,15 @@ class App extends React.Component {
       });
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.isSignInWithEmailLink();
   }
 
   async initContracts() {
     await getContractsAddresses(web3config.netid);
-    this.identityManager = new IdentityManager();
-    await this.identityManager.init();
+    this.identity = new Identity();
+    await this.identity.init();
   }
 
   /**
@@ -173,6 +173,13 @@ class App extends React.Component {
    */
   componentWillMount() {
     this.initContracts();
+    
+    // Store ether address to claim
+    let url = window.location.href.split("/");
+    if (url[url.length-1].startsWith('0x')) {
+      this.reqAddr = url[url.length-1];
+      window.localStorage.setItem('reqAddr', this.reqAddr);
+    }
 
     // For manual phone sign-in
     /*
