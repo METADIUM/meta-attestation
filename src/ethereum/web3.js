@@ -8,16 +8,22 @@ import Web3 from 'web3';
  *   - identity
  */
 import web3config from './web3-config.json';
+const privateKey = new Buffer(web3config.privkey, 'hex');
 
 // Transaction.
 const Tx = require('ethereumjs-tx');
+const ethUtil = require('ethereumjs-util');
 
 const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
+
+function sign(msg) {
+  let hash = ethUtil.hashPersonalMessage(new Buffer(msg, 'hex'));
+  return ethUtil.ecsign(hash, privateKey, web3.version.network);
+}
 
 // Signs the given transaction data and sends it. Abstracts some of the details 
 // of buffering and serializing the transaction for web3.
 function sendSigned(txData, cb) {
-  const privateKey = new Buffer(web3config.privkey, 'hex');
   const transaction = new Tx(txData);
   transaction.sign(privateKey);
   const serializedTx = transaction.serialize().toString('hex');
@@ -48,5 +54,6 @@ function sendTransaction(to, data) {
 export default web3;
 export {
   sendSigned,
-  sendTransaction
+  sendTransaction,
+  sign
 }

@@ -72,7 +72,17 @@ class App extends React.Component {
   };
 
   test() {
-    sendTransaction(web3config.identity, '');
+    var addr = window.localStorage.getItem('reqAddr');
+    if (! addr) {
+      return;
+    }
+
+    sendTransaction(web3config.identity, this.identity.addClaim({
+      addr: addr,
+      topic: 1,
+      scheme: 2,
+      uri: 'attestation'
+    }));
   }
 
   sendSignInLinkToEmail() {
