@@ -1,8 +1,8 @@
-import web3, { sign } from '../web3';
+import web3, { signTx, getTxDataWoNonce } from '../web3';
 import web3config from '../web3-config.json';
 import { getBranch, getABI } from './helpers';
 
-var abi = require('ethereumjs-abi');
+const ethUtil = require('ethereumjs-util');
 
 export default class Identity {
   async init() {
@@ -21,12 +21,17 @@ export default class Identity {
    * @param {uri} string
    */
   addClaim({ addr, topic, scheme, uri }) {
-
-    const claim = this.identityInstance.methods.claimToSign(web3config.addr, topic, new Buffer(data, 'hex')).encodeABI();
-
     const data = 'data';
+    const bData = ethUtil.hashPersonalMessage(new Buffer(data, 'hex'));
+    
+    const claim = this.identityInstance.methods.claimToSign(web3config.addr, topic, bData).encodeABI();
+    const signature = signTx(getTxDataWoNonce(addr, claim));
+    return this.identityInstance.methods.addClaim(topic, scheme, web3config.addr, signature, bData, uri).encodeABI();
+
+    /*
     const { r, s, v } = sign(data);
     const signature = Buffer.concat([new Buffer(r), new Buffer(s), new Buffer(v)]);
     return this.identityInstance.methods.addClaim(topic, scheme, web3config.addr, signature, new Buffer(data, 'hex'), uri).encodeABI();
+    */
   }
 }
