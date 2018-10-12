@@ -72,6 +72,10 @@ class App extends React.Component {
   };
 
   test() {
+    sendTransaction(web3config.identity, '');
+  }
+
+  attest() {
     var addr = window.localStorage.getItem('reqAddr');
     if (! addr) {
       return;
@@ -80,7 +84,7 @@ class App extends React.Component {
     sendTransaction(addr, this.identity.addClaim({
       addr: addr,
       topic: 1,
-      scheme: 2,
+      scheme: 1,
       uri: 'attestation'
     }));
   }
@@ -130,7 +134,7 @@ class App extends React.Component {
         // result.additionalUserInfo.profile == null
         // You can check if the user is new or existing:
         // result.additionalUserInfo.isNewUser
-        this.setState({isSignedIn: true});
+        this.setState({isSignedIn: true}, () => this.attest());
       })
       .catch(function(error) {
         // Some error occurred, you can inspect the code: error.code
