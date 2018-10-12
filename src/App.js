@@ -134,17 +134,12 @@ class App extends React.Component {
         // result.additionalUserInfo.profile == null
         // You can check if the user is new or existing:
         // result.additionalUserInfo.isNewUser
-        this.setState({isSignedIn: true}, () => this.attest());
+        this.setState({isSignedIn: true});
       })
       .catch(function(error) {
         // Some error occurred, you can inspect the code: error.code
         // Common errors could be invalid email and invalid or expired OTPs.
       });
-  }
-
-  constructor(props) {
-    super(props);
-    this.isSignInWithEmailLink();
   }
 
   async initContracts() {
@@ -153,12 +148,16 @@ class App extends React.Component {
     await this.identity.init();
   }
 
+  constructor(props) {
+    super(props);
+    this.isSignInWithEmailLink();
+    this.initContracts();
+  }
+
   /**
    * @inheritDoc
    */
   componentWillMount() {
-    this.initContracts();
-    
     // Store ether address to claim
     let url = window.location.href.split("/");
     if (url[url.length-1].startsWith('0x')) {
@@ -188,6 +187,8 @@ class App extends React.Component {
   componentDidMount() {
     this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
       this.setState({isSignedIn: !!user});
+      if (user) console.log('user', user.providerData[0].providerId);
+      // providerId: github.com || google.com || phone
     });
   }
 
@@ -227,8 +228,12 @@ class App extends React.Component {
         }
         {this.state.isSignedIn &&
           <div className={styles.signedIn}>
-            Hello {firebaseApp.auth().currentUser.displayName}. You are now signed In!
-            <a className={styles.button} onClick={() => firebaseApp.auth().signOut()}>Sign-out</a>
+            <center>
+              Hello !! {firebaseApp.auth().currentUser.displayName}<br />
+              You are now signed in!<br />
+              using {firebaseApp.auth().currentUser.providerData[0].providerId}<br />
+              <a className={styles.button} onClick={() => firebaseApp.auth().signOut()}>Sign-out</a>
+            </center>
           </div>
         }
       </div>
