@@ -16,11 +16,9 @@ const ethUtil = require('ethereumjs-util');
 
 const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
 
-async function getTxData(to, data) {
-  const txCount = await web3.eth.getTransactionCount(web3config.addr);
-  // Construct the transaction data
-  const txData = {
-    nonce: web3.utils.toHex(txCount),
+// Get TX data without nonce
+function getTxDataWoNonce(to, data) {
+  return {
     gasLimit: web3.utils.toHex(40e3),
     gasPrice: web3.utils.toHex(10e9), // 10 Gwei
     from: web3config.addr,
@@ -28,7 +26,14 @@ async function getTxData(to, data) {
     data: data,
     value: web3.utils.toHex(web3.utils.toWei('0.001', 'ether'))
   };
-  return signTx(txData);
+}
+
+async function getTxData(to, data) {
+  var txData = getTxDataWoNonce(to, data);
+
+  const txCount = await web3.eth.getTransactionCount(web3config.addr);
+  txData['nonce'] = txCount;
+  return txData;
 }
 
 function sign(msg) {
@@ -50,7 +55,7 @@ function sendSigned(txData, cb) {
 
 async function sendTransaction(to, data) {
   const txData = await getTxData(to, data);
-  sendSigned(txData, function(err, result) {
+  sendSigned(signTx(txData), function(err, result) {
     if (err) return console.log('error', err);
     console.log('txid', result)
   });
@@ -59,6 +64,7 @@ async function sendTransaction(to, data) {
 export default web3;
 export {
   getTxData,
+  getTxDataWoNonce,
   sign,
   signTx,
   sendSigned,
