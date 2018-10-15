@@ -75,7 +75,7 @@ class App extends React.Component {
     sendTransaction(web3config.identity, '');
   }
 
-  attest() {
+  attest(topic) {
     var addr = window.localStorage.getItem('reqAddr');
     if (! addr) {
       return;
@@ -83,7 +83,7 @@ class App extends React.Component {
 
     sendTransaction(addr, this.identity.addClaim({
       addr: addr,
-      topic: 1,
+      topic: topic,
       scheme: 1,
       uri: 'attestation'
     }));
@@ -161,7 +161,7 @@ class App extends React.Component {
     // Store ether address to claim
     let url = window.location.href.split("/");
     if (url[url.length-1].startsWith('0x')) {
-      this.reqAddr = url[url.length-1];
+      this.reqAddr = url[url.length-1].split("&")[0];
       window.localStorage.setItem('reqAddr', this.reqAddr);
     }
 
@@ -187,8 +187,18 @@ class App extends React.Component {
   componentDidMount() {
     this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
       this.setState({isSignedIn: !!user});
-      if (user) console.log('user', user.providerData[0].providerId);
-      // providerId: github.com || google.com || phone
+      if (user) {
+        console.log('user', user.providerData[0].providerId);
+        // providerId: github.com || google.com || phone
+        /*
+        switch (user.providerData[0].providerId) {
+          case 'google.com': this.attest(1); break;
+          case 'github.com': this.attest(2); break;
+          case 'phone': this.attest(3); break;
+          default: this.attest(1); break;
+        }
+        */
+      }
     });
   }
 
