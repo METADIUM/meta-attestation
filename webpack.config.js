@@ -21,7 +21,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
   context: __dirname,
-
   entry: './src/App.js',
   output: {
     filename: 'bundle.js',
@@ -29,12 +28,15 @@ const config = {
   },
   devtool: 'cheap-module-source-map',
   resolve: {
-    extensions: ['.js', '.jsx', '.json'],
+    extensions: ['.js', '.json'],
   },
   stats: {
     colors: true,
     reasons: true,
     chunks: true,
+  },
+  performance: {
+    hints: false,
   },
   plugins: [new ExtractTextPlugin('./bundle.css')],
   module: {
@@ -44,9 +46,7 @@ const config = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         include: [
-          path.resolve(__dirname, './src'),
-          path.resolve(__dirname, './src/ethereum'),
-          path.resolve(__dirname, './src/ethereum/contracts')
+          path.resolve(__dirname, './src')
         ],
       },
       {

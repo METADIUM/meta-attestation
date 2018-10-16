@@ -53,7 +53,19 @@ class App extends React.Component {
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.GithubAuthProvider.PROVIDER_ID,
-      firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+      {
+        provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+        recaptchaParameters: {
+          type: 'image', // 'audio' or 'image'
+          size: 'normal', // 'normal' or 'invisible' or 'compact'
+          badge: 'bottomleft' //' bottomright' or 'inline' applies to invisible.
+        },
+        defaultCountry: 'KR',
+        defaultNationalNumber: '821012341234',
+        loginHint: '+821023456789',
+        //whitelistedCountries: ['US', '+44'],
+        //blacklistedCountries: ['US', '+44'],
+      },
     ],
     callbacks: {
       signInSuccessWithAuthResult: () => false,
@@ -188,6 +200,7 @@ class App extends React.Component {
     this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
       this.setState({isSignedIn: !!user});
       if (user) {
+        const phone = user.phoneNumber;
         console.log('user', user.providerData[0].providerId);
         // providerId: github.com || google.com || phone
         /*
