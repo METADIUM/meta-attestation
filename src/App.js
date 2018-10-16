@@ -171,6 +171,7 @@ class App extends React.Component {
    */
   componentWillMount() {
     // Store ether address to claim
+    // NOTE: URL encryption is needed to security?
     let url = window.location.href.split("/");
     for (let i in url) {
       if (url[i].startsWith('0x')) {
