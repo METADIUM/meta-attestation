@@ -172,11 +172,15 @@ class App extends React.Component {
   componentWillMount() {
     // Store ether address to claim
     let url = window.location.href.split("/");
-    if (url[url.length-1].startsWith('0x')) {
-      this.reqAddr = url[url.length-1].split("&")[0];
-      window.localStorage.setItem('reqAddr', this.reqAddr);
+    for (let i in url) {
+      if (url[i].startsWith('0x')) {
+        this.reqAddr = url[i].split("&")[0];
+        window.localStorage.setItem('reqAddr', this.reqAddr);
+      } else if (url[i].startsWith('00')) {
+        this.reqPhoneNo = url[i].split("&")[0].substring(2);
+      }
     }
-
+    
     // For manual phone sign-in
     /*
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
