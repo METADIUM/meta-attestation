@@ -1,4 +1,5 @@
 /node_modules
+/package-lock.json
 /firebase-debug.log
 /src/firebase-config.json
 /src/ethereum/web3-config.json
