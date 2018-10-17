@@ -84,7 +84,7 @@ class App extends React.Component {
   };
 
   test() {
-    sendTransaction(web3config.identity, '');
+    //sendTransaction(web3config.identity, '');
   }
 
   attest(topic) {
@@ -204,18 +204,33 @@ class App extends React.Component {
   componentDidMount() {
     this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
       this.setState({isSignedIn: !!user});
-      if (user) {
-        const phone = user.phoneNumber;
-        console.log('user', user.providerData[0].providerId);
-        // providerId: github.com || google.com || phone
-        /*
-        switch (user.providerData[0].providerId) {
-          case 'google.com': this.attest(1); break;
-          case 'github.com': this.attest(2); break;
-          case 'phone': this.attest(3); break;
-          default: this.attest(1); break;
-        }
-        */
+      if (!user || !user.providerData) return;
+
+      console.log('user', user.providerData[0].providerId);
+      // providerId: github.com || google.com || phone
+
+      switch (user.providerData[0].providerId) {
+        // In case of github auth
+        case 'github.com':
+          this.attest(3);
+          break;
+
+        // In case of phone auth
+        case 'phone':
+          if (this.reqPhoneNo && this.reqPhoneNo == user.phoneNumber) {
+            this.attest(2);
+          } else {
+            // Because of authentication with different phone number,
+            // send fail response through URI
+            window.open('uri://authfail/' + user.phoneNumber, '_blank');
+          }
+          break;
+
+        // In case of email auth
+        case 'google.com':
+        default:
+          this.attest(1);
+          break;
       }
     });
   }

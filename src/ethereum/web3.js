@@ -57,7 +57,10 @@ async function sendTransaction(to, data) {
   const txData = await getTxData(to, data);
   sendSigned(signTx(txData), function(err, result) {
     if (err) return console.log('error', err);
-    console.log('txid', result)
+    console.log('txid', result);
+
+    // Send success response through URI
+    window.open('uri://auth/' + result, '_blank');
   });
 }
 
