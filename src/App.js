@@ -48,6 +48,15 @@ import Identity from './ethereum/contracts/Identity.contract';
  * The Splash Page containing the login UI.
  */
 class App extends React.Component {
+  state = {
+    isSignedIn: undefined,
+    contractReady: false
+  };
+
+  contracts = {
+    identity: new Identity()
+  };
+
   uiConfig = {
     signInFlow: 'popup',
     signInOptions: [
@@ -70,10 +79,6 @@ class App extends React.Component {
     callbacks: {
       signInSuccessWithAuthResult: () => false,
     },
-  };
-
-  state = {
-    isSignedIn: undefined,
   };
 
   actionCodeSettings = {
@@ -156,8 +161,8 @@ class App extends React.Component {
 
   async initContracts() {
     await getContractsAddresses(web3config.netid);
-    this.identity = new Identity();
-    await this.identity.init();
+    Promise.all(Object.values(this.contracts).map(async (contract) => { await contract.init() }))
+      .then(() => { this.setState({contractReady: true}) });
   }
 
   constructor(props) {
@@ -254,11 +259,13 @@ class App extends React.Component {
         </div>
         {this.state.isSignedIn !== undefined && !this.state.isSignedIn &&
           <div>
-            <StyledFirebaseAuth
-              className={styles.firebaseUi}
-              uiConfig={this.uiConfig}
-              firebaseAuth={firebaseApp.auth()}
-            />
+            {this.state.contractReady &&
+              <StyledFirebaseAuth
+                className={styles.firebaseUi}
+                uiConfig={this.uiConfig}
+                firebaseAuth={firebaseApp.auth()}
+              />
+            }
             <center>
               <input type="text" id="email" placeholder="Put your email" />
               <button type="button" onClick={() => this.sendSignInLinkToEmail()}>Sign in with Email link</button>
