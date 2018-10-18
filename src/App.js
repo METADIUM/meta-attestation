@@ -106,6 +106,7 @@ class App extends React.Component {
     }));
   }
 
+  // NOTE: URL encryption is needed to security?
   sendSignInLinkToEmail() {
     var email = document.getElementById('email');
     if (! email.value) {
@@ -176,7 +177,6 @@ class App extends React.Component {
    */
   componentWillMount() {
     // Store ether address to claim
-    // NOTE: URL encryption is needed to security?
     let url = window.location.href.split("/");
     for (let i in url) {
       if (url[i].startsWith('0x')) {
@@ -260,16 +260,18 @@ class App extends React.Component {
         {this.state.isSignedIn !== undefined && !this.state.isSignedIn &&
           <div>
             {this.state.contractReady &&
-              <StyledFirebaseAuth
-                className={styles.firebaseUi}
-                uiConfig={this.uiConfig}
-                firebaseAuth={firebaseApp.auth()}
-              />
+              <div>
+                <StyledFirebaseAuth
+                  className={styles.firebaseUi}
+                  uiConfig={this.uiConfig}
+                  firebaseAuth={firebaseApp.auth()}
+                />
+                <center>
+                  <input type="text" id="email" placeholder="Put your email" />
+                  <button type="button" onClick={() => this.sendSignInLinkToEmail()}>Sign in with Email link</button>
+                </center>
+              </div>
             }
-            <center>
-              <input type="text" id="email" placeholder="Put your email" />
-              <button type="button" onClick={() => this.sendSignInLinkToEmail()}>Sign in with Email link</button>
-            </center>
             <p />
             <center>
               <button type="button" onClick={() => this.test()}>TEST</button>
