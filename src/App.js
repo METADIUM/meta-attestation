@@ -50,31 +50,34 @@ import Identity from './ethereum/contracts/Identity.contract';
 class App extends React.Component {
   state = {
     isSignedIn: undefined,
-    contractReady: false
+    isPhoneAuth: false,
+    contractReady: false,
   };
 
   contracts = {
     identity: new Identity()
   };
 
+  authPhoneConfig = {
+    provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+    recaptchaParameters: {
+      type: 'image', // 'audio' or 'image'
+      size: 'normal', // 'normal' or 'invisible' or 'compact'
+      badge: 'bottomleft' //' bottomright' or 'inline' applies to invisible.
+    },
+    defaultCountry: 'KR',
+    // defaultNationalNumber: '821012341234',
+    loginHint: '+821023456789',
+    // whitelistedCountries: ['US', '+82'],
+    // blacklistedCountries: ['US', '+44'],
+  };
+
   uiConfig = {
     signInFlow: 'popup',
     signInOptions: [
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.GithubAuthProvider.PROVIDER_ID,
-      {
-        provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-        recaptchaParameters: {
-          type: 'image', // 'audio' or 'image'
-          size: 'normal', // 'normal' or 'invisible' or 'compact'
-          badge: 'bottomleft' //' bottomright' or 'inline' applies to invisible.
-        },
-        defaultCountry: 'KR',
-        defaultNationalNumber: '821012341234',
-        loginHint: '+821023456789',
-        //whitelistedCountries: ['US', '+44'],
-        //blacklistedCountries: ['US', '+44'],
-      },
+      // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+      this.authPhoneConfig,
     ],
     callbacks: {
       signInSuccessWithAuthResult: () => false,
@@ -184,6 +187,8 @@ class App extends React.Component {
         window.localStorage.setItem('reqAddr', this.reqAddr);
       } else if (url[i].startsWith('00')) {
         this.reqPhoneNo = url[i].split("&")[0].substring(2);
+      } else if (url[i].startsWith('phone')) {
+        this.setState({ isPhoneAuth: true });
       }
     }
     
@@ -259,18 +264,18 @@ class App extends React.Component {
         </div>
         {this.state.isSignedIn !== undefined && !this.state.isSignedIn &&
           <div>
-            {this.state.contractReady &&
-              <div>
-                <StyledFirebaseAuth
-                  className={styles.firebaseUi}
-                  uiConfig={this.uiConfig}
-                  firebaseAuth={firebaseApp.auth()}
-                />
-                <center>
-                  <input type="text" id="email" placeholder="Put your email" />
-                  <button type="button" onClick={() => this.sendSignInLinkToEmail()}>Sign in with Email link</button>
-                </center>
-              </div>
+            {this.state.contractReady && ! this.state.isPhoneAuth &&
+              <center>
+                <input type="text" id="email" placeholder="Put your email" />
+                <button type="button" onClick={() => this.sendSignInLinkToEmail()}>Sign in with Email link</button>
+              </center>
+            }
+            {this.state.contractReady && this.state.isPhoneAuth &&
+              <StyledFirebaseAuth
+                className={styles.firebaseUi}
+                uiConfig={this.uiConfig}
+                firebaseAuth={firebaseApp.auth()}
+              />
             }
             <p />
             <center>
