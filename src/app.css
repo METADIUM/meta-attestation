@@ -20,8 +20,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #0288D1;
-  background: radial-gradient(circle, #039BE5, #01579b);
+  background-color: #FAFAFA;
+  background: radial-gradient(circle, #FAFAFA, #FAFAFA);
   z-index: 10000;
   display: flex;
   justify-content: center;
@@ -73,4 +73,41 @@
   color: blue;
   text-decoration: underline;
   margin-top: 10px;
+}
+.emailInput {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #B2B8C1;
+  color: #B2B8C1;
+  box-sizing: border-box;
+  font-family: 'Amaranth', sans-serif;
+  font-size: 18px;
+  height: 50px;
+  left: 50%;
+  margin: -25px 0 0 -100px;
+  padding: 10px 0px;
+  position: relative;
+  top: 50%;
+  width: 200px;
+}
+.emailBtn {
+  width: 200px;
+  height: 50px;
+  line-height: 50px;
+  background-color: #B2B8C1;
+  color: #4C5E75;
+  font-family: 'Amaranth', sans-serif;
+  font-size: 14px;
+  position: center;
+}
+.emailContent {
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+}
+.emailIcon {
+  width: 37px;
+  height: 37px;
+  background-image: url('../public/images/email.png');
+  background-repeat: no-repeat;
 }

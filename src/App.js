@@ -24,6 +24,7 @@ import ReactDOM from 'react-dom';
 import styles from './app.css'; // This uses CSS modules.
 import './firebaseui-styling.global.css'; // Import globally.
 import logo from '../public/images/logo.png';
+import emailIcon from '../public/images/email.png';
 
 // Firebase.
 import firebase from 'firebase/app';
@@ -67,7 +68,7 @@ class App extends React.Component {
     },
     defaultCountry: 'KR',
     // defaultNationalNumber: '821012341234',
-    loginHint: '+821023456789',
+    // loginHint: '+821023456789',
     // whitelistedCountries: ['US', '+82'],
     // blacklistedCountries: ['US', '+44'],
   };
@@ -265,10 +266,22 @@ class App extends React.Component {
         {this.state.isSignedIn !== undefined && !this.state.isSignedIn &&
           <div>
             {this.state.contractReady && ! this.state.isPhoneAuth &&
-              <center>
-                <input type="text" id="email" placeholder="Put your email" />
-                <button type="button" onClick={() => this.sendSignInLinkToEmail()}>Sign in with Email link</button>
-              </center>
+              <div>
+                <input
+                  className={styles.emailInput}
+                  id="email"
+                  type="text"
+                  placeholder="Put your email address"
+                />
+                <p />
+                <button
+                  className={styles.emailBtn}
+                  type="button"
+                  onClick={() => this.sendSignInLinkToEmail()}
+                >
+                  <div className={styles.emailContent}><img src={emailIcon} />Verify E-mail</div>
+                </button>
+              </div>
             }
             {this.state.contractReady && this.state.isPhoneAuth &&
               <StyledFirebaseAuth
