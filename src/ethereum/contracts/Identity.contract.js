@@ -16,12 +16,11 @@ export default class Identity {
    * @param {addr} string
    * @param {topic} uint256
    * @param {scheme} uint256 // 1: ECDSA_SCHEME, 2: RSA_SCHEME
-   * @param {data} bytes
-   * @param {signature} bytes
+   * @param {data} string
    * @param {uri} string
+   * @param {signature} bytes
    */
-  addClaim({ addr, topic, scheme, uri }) {
-    const data = 'data';
+  addClaim({ addr, topic, scheme, data, uri }) {
     const bData = ethUtil.hashPersonalMessage(new Buffer(data, 'hex'));
     
     const claim = this.identityInstance.methods.claimToSign(web3config.addr, topic, bData).encodeABI();

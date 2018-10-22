@@ -92,7 +92,7 @@ class App extends React.Component {
     'handleCodeInApp': true // This must be true.
   };
 
-  attest(topic) {
+  attest(topic, data) {
     var addr = window.localStorage.getItem('reqAddr');
     if (! addr) {
       return;
@@ -102,6 +102,7 @@ class App extends React.Component {
       addr: addr,
       topic: topic,
       scheme: 1,
+      data: data,
       uri: 'attestation'
     }));
   }
@@ -219,13 +220,13 @@ class App extends React.Component {
       switch (user.providerData[0].providerId) {
         // In case of github auth
         case 'github.com':
-          this.attest(3);
+          this.attest(3, user.email);
           break;
 
         // In case of phone auth
         case 'phone':
-          if (this.reqPhoneNo && this.reqPhoneNo == user.phoneNumber) {
-            this.attest(2);
+          if (true /* this.reqPhoneNo && this.reqPhoneNo == user.phoneNumber */) {
+            this.attest(2, user.phoneNumber);
           } else {
             // Because of authentication with different phone number,
             // send fail response through URI
@@ -236,7 +237,7 @@ class App extends React.Component {
         // In case of email auth
         case 'google.com':
         default:
-          this.attest(1);
+          this.attest(1, user.email);
           break;
       }
     });
