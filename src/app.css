@@ -44,6 +44,7 @@
 .logoIcon {
   width: 80%;
   position: relative;
+  content: url('../public/images/logo.png');
 }
 .caption {
   margin: 20px 0 40px 0;

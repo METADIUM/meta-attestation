@@ -23,7 +23,6 @@ import ReactDOM from 'react-dom';
 // Styles
 import styles from './app.css'; // This uses CSS modules.
 import './firebaseui-styling.global.css'; // Import globally.
-import logo from '../public/images/logo.png';
 import emailIcon from '../public/images/email.png';
 
 // Firebase.
@@ -257,7 +256,7 @@ class App extends React.Component {
     return (
       <div className={styles.container}>
         <div className={styles.logo}>
-          <center><img className={styles.logoIcon} src={logo}/></center><br />
+          <center><img className={styles.logoIcon}/></center><br />
           <center>Verify your information and stack a claim</center>
         </div>
         <p />
