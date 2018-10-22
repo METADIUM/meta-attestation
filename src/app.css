@@ -28,7 +28,7 @@
   align-items: center;
   color: white;
   flex-direction: column;
-  font-family: sans-serif;
+  /* font-family: sans-serif; */
 }
 .signedIn {
   display: flex;
@@ -37,18 +37,16 @@
   flex-direction: column;
 }
 .logo {
-  font-family: 'Amaranth', sans-serif;
-  font-size: 200%;
+  font-size: 16px;
+  color: #7AACF8;
+  align-items: center;
 }
 .logoIcon {
-  top: 4px;
-  width: 30%;
-  font-size: 32px;
+  width: 100%;
   position: relative;
 }
 .caption {
   margin: 20px 0 40px 0;
-  font-family: 'Amaranth', sans-serif;
   font-size: 18px;
   opacity: 0.8;
 }
@@ -80,8 +78,7 @@
   border-bottom: 1px solid #B2B8C1;
   color: #B2B8C1;
   box-sizing: border-box;
-  font-family: 'Amaranth', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   height: 50px;
   left: 50%;
   margin: -25px 0 0 -100px;
@@ -96,7 +93,6 @@
   line-height: 50px;
   background-color: #B2B8C1;
   color: #4C5E75;
-  font-family: 'Amaranth', sans-serif;
   font-size: 14px;
   position: center;
 }

@@ -92,10 +92,6 @@ class App extends React.Component {
     'handleCodeInApp': true // This must be true.
   };
 
-  test() {
-    //sendTransaction(web3config.identity, '');
-  }
-
   attest(topic) {
     var addr = window.localStorage.getItem('reqAddr');
     if (! addr) {
@@ -260,9 +256,10 @@ class App extends React.Component {
     return (
       <div className={styles.container}>
         <div className={styles.logo}>
-          {/* <i className={styles.logoIcon + ' material-icons'}>photo</i> Meta Attestation */}
           <center><img className={styles.logoIcon} src={logo}/></center>
+          <br />Verify your information and stack a claim
         </div>
+        <p />
         {this.state.isSignedIn !== undefined && !this.state.isSignedIn &&
           <div>
             {this.state.contractReady && ! this.state.isPhoneAuth &&
@@ -290,10 +287,6 @@ class App extends React.Component {
                 firebaseAuth={firebaseApp.auth()}
               />
             }
-            <p />
-            <center>
-              <button type="button" onClick={() => this.test()}>TEST</button>
-            </center>
           </div>
         }
         {this.state.isSignedIn &&
