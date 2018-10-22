@@ -256,8 +256,8 @@ class App extends React.Component {
     return (
       <div className={styles.container}>
         <div className={styles.logo}>
-          <center><img className={styles.logoIcon} src={logo}/></center>
-          <br />Verify your information and stack a claim
+          <center><img className={styles.logoIcon} src={logo}/></center><br />
+          <center>Verify your information and stack a claim</center>
         </div>
         <p />
         {this.state.isSignedIn !== undefined && !this.state.isSignedIn &&
