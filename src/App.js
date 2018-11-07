@@ -312,9 +312,7 @@ class App extends React.Component {
         {this.state.isSignedIn &&
           <div className={styles.signedIn}>
             <center>
-              Hello !! {firebaseApp.auth().currentUser.displayName}<br />
-              You are now signed in!<br />
-              using {firebaseApp.auth().currentUser.providerData[0].providerId}<br />
+              Your {this.state.isEmailAuth ? 'E-mail' : 'Phone No.'} has been verified! Thanks!<br />
               <a className={styles.button} onClick={() => firebaseApp.auth().signOut()}>Sign-out</a>
             </center>
           </div>
