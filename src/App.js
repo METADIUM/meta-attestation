@@ -23,7 +23,6 @@ import ReactDOM from 'react-dom';
 // Styles
 import styles from './app.css'; // This uses CSS modules.
 import './firebaseui-styling.global.css'; // Import globally.
-import emailIcon from '../public/images/email.png';
 
 // Firebase.
 import firebase from 'firebase/app';
@@ -48,6 +47,7 @@ import Identity from './ethereum/contracts/Identity.contract';
  * The Splash Page containing the login UI.
  */
 class App extends React.Component {
+
   state = {
     isSignedIn: undefined,
     isPhoneAuth: false,
@@ -65,7 +65,7 @@ class App extends React.Component {
       size: 'normal', // 'normal' or 'invisible' or 'compact'
       badge: 'bottomleft' //' bottomright' or 'inline' applies to invisible.
     },
-    defaultCountry: 'KR',
+    // defaultCountry: 'KR',
     // defaultNationalNumber: '821012341234',
     // loginHint: '+821023456789',
     // whitelistedCountries: ['US', '+82'],
@@ -177,17 +177,29 @@ class App extends React.Component {
    */
   componentWillMount() {
     // Store ether address to claim
-    let url = window.location.href.split("/");
+    let url = window.location.href.split('/');
+    let isEmailAuth = false, isPhoneAuth = false, existData = false;
     for (let i in url) {
-      if (url[i].startsWith('0x')) {
-        this.reqAddr = url[i].split("&")[0];
-        window.localStorage.setItem('reqAddr', this.reqAddr);
-      } else if (url[i].startsWith('00')) {
-        this.reqPhoneNo = url[i].split("&")[0].substring(2);
+      if (url[i].startsWith('email')) {
+        isEmailAuth = true;
       } else if (url[i].startsWith('phone')) {
-        this.setState({ isPhoneAuth: true });
+        isPhoneAuth = true;
+      } else if (url[i].startsWith('0x')) {
+        let addrNdata = url[i].split('?');
+        if (addrNdata.length === 1) break;
+        this.reqAddr = addrNdata[0];
+        let data = addrNdata[1].split('=');
+        if (data[0] !== 'data') break;
+        this.data = decodeURIComponent(data[1].split('&')[0]);
+        this.authPhoneConfig.defaultNationalNumber = this.data;
+        existData = true;
+        window.localStorage.setItem('reqAddr', this.reqAddr);
       }
     }
+
+    if (isEmailAuth && existData) this.setState({ isEmailAuth: true });
+    else if (isPhoneAuth && existData) this.setState({ isPhoneAuth: true });
+    else this.setState({ isEmailAuth: false, isPhoneAuth: false });
     
     // For manual phone sign-in
     /*
@@ -256,27 +268,34 @@ class App extends React.Component {
     return (
       <div className={styles.container}>
         <div className={styles.logo}>
-          <center><img className={styles.logoIcon}/></center><br />
+          <center><img className={styles.logoIcon} /></center><br />
           <center>Verify your information and stack a claim</center>
         </div>
         <p />
         {this.state.isSignedIn !== undefined && !this.state.isSignedIn &&
           <div>
-            {this.state.contractReady && ! this.state.isPhoneAuth &&
+            {this.state.contractReady && ! this.state.isEmailAuth && ! this.state.isPhoneAuth &&
+              <div>
+                <h1 style={{ color: 'red' }}>Wrong request</h1>
+              </div>
+            }
+            {this.state.contractReady && this.state.isEmailAuth &&
               <div>
                 <input
                   className={styles.emailInput}
-                  id="email"
-                  type="text"
-                  placeholder="Put your email address"
+                  id='email'
+                  type='text'
+                  value={this.data}
+                  placeholder='Put your email address'
+                  disabled={true}
                 />
                 <p />
                 <button
                   className={styles.emailBtn}
-                  type="button"
+                  type='button'
                   onClick={() => this.sendSignInLinkToEmail()}
                 >
-                  <div className={styles.emailContent}><img src={emailIcon} />Verify E-mail</div>
+                  <div className={styles.emailContent}><img className={styles.emailIcon} />Verify E-mail</div>
                 </button>
               </div>
             }
