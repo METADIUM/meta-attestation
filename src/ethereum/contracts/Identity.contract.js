@@ -21,6 +21,10 @@ export default class Identity {
    * @param {signature} bytes
    */
   addClaim({ addr, topic, scheme, data, uri }) {
+    // Validate ABI
+    if (! this.identityInstance.methods.claimToSign ||
+        ! this.identityInstance.methods.addClaim) return;
+
     const bData = ethUtil.hashPersonalMessage(new Buffer(data, 'hex'));
     
     const claim = this.identityInstance.methods.claimToSign(web3config.addr, topic, bData).encodeABI();

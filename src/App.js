@@ -97,7 +97,7 @@ class App extends React.Component {
       return;
     }
 
-    sendTransaction(addr, this.identity.addClaim({
+    sendTransaction(addr, this.contracts.identity.addClaim({
       addr: addr,
       topic: topic,
       scheme: 1,
@@ -152,7 +152,7 @@ class App extends React.Component {
         // result.additionalUserInfo.profile == null
         // You can check if the user is new or existing:
         // result.additionalUserInfo.isNewUser
-        this.setState({isSignedIn: true});
+        this.setState({ isSignedIn: true });
       })
       .catch(function(error) {
         // Some error occurred, you can inspect the code: error.code
@@ -163,7 +163,7 @@ class App extends React.Component {
   async initContracts() {
     await getContractsAddresses(web3config.netid);
     Promise.all(Object.values(this.contracts).map(async (contract) => { await contract.init() }))
-      .then(() => { this.setState({contractReady: true}) });
+      .then(() => { this.setState({ contractReady: true }) });
   }
 
   constructor(props) {
@@ -191,7 +191,8 @@ class App extends React.Component {
         let data = addrNdata[1].split('=');
         if (data[0] !== 'data') break;
         this.data = decodeURIComponent(data[1].split('&')[0]);
-        this.authPhoneConfig.defaultNationalNumber = this.data;
+        // this.authPhoneConfig.defaultNationalNumber = this.data;
+        this.authPhoneConfig.loginHint = '+' + this.data;
         existData = true;
         window.localStorage.setItem('reqAddr', this.reqAddr);
       }
@@ -222,7 +223,7 @@ class App extends React.Component {
    */
   componentDidMount() {
     this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
-      this.setState({isSignedIn: !!user});
+      this.setState({ isSignedIn: !!user });
       if (!user || !user.providerData) return;
 
       console.log('user', user.providerData[0].providerId);
