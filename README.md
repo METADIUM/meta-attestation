@@ -24,6 +24,10 @@ Here is example:
     ```bash
     npm install
     ```
+1. Install firebase tools, if you do not have:
+    ```bash
+    npm install -g firebase-tools
+    ```
 1. Tell Firebase to use your new project locally:
     ```bash
     firebase use --add
