@@ -20,7 +20,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
 function getTxDataWoNonce(to, data) {
   return {
     gasLimit: web3.utils.toHex(40e3),
-    gasPrice: web3.utils.toHex(10e9), // 10 Gwei
+    gasPrice: web3.utils.toHex(80e9), // 80 Gwei
     from: web3config.addr,
     to: to,
     data: data
@@ -60,7 +60,7 @@ async function sendTransaction(to, data) {
     console.log('txid', result);
 
     // Send success response through URI
-    window.open('uri://auth/' + result, '_blank');
+    window.open('uri://auth/' + result);
   });
 }
 

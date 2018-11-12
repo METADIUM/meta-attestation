@@ -38,6 +38,8 @@ Here is example:
     ```
 1. Try out the app by opening [http://localhost:5000](http://localhost:5000) in your browser.
 
+## Deploy
+1. `firebase deploy`
 
 ## License
 

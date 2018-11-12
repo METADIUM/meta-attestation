@@ -226,7 +226,7 @@ class App extends React.Component {
       this.setState({ isSignedIn: !!user });
       if (!user || !user.providerData) return;
 
-      console.log('user', user.providerData[0].providerId);
+      // console.log('user', user.providerData[0].providerId);
       // providerId: github.com || google.com || phone
 
       switch (user.providerData[0].providerId) {
