@@ -168,6 +168,7 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log('v1.0.1');
     this.isSignInWithEmailLink();
     this.initContracts();
   }
@@ -238,7 +239,7 @@ class App extends React.Component {
         // In case of phone auth
         case 'phone':
           if (true /* this.reqPhoneNo && this.reqPhoneNo == user.phoneNumber */) {
-            this.attest(2, user.phoneNumber);
+            this.attest(20, user.phoneNumber);
           } else {
             // Because of authentication with different phone number,
             // send fail response through URI
@@ -249,7 +250,7 @@ class App extends React.Component {
         // In case of email auth
         case 'google.com':
         default:
-          this.attest(1, user.email);
+          this.attest(30, user.email);
           break;
       }
     });

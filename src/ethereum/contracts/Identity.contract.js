@@ -2,7 +2,7 @@ import web3, { signTx, getTxDataWoNonce } from '../web3';
 import web3config from '../web3-config.json';
 import { getBranch, getABI } from './helpers';
 
-// const ethUtil = require('ethereumjs-util');
+const ethUtil = require('ethereumjs-util');
 
 export default class Identity {
   async init() {
@@ -29,7 +29,8 @@ export default class Identity {
     const bData = Buffer.from(data);
     
     const claim = this.identityInstance.methods.claimToSign(web3config.addr, topic, bData).encodeABI();
-    const signature = signTx(getTxDataWoNonce(addr, claim));
+    const signature = ethUtil.keccak256(claim);
+    // const signature = signTx(getTxDataWoNonce(addr, claim));
     return this.identityInstance.methods.addClaim(topic, scheme, web3config.addr, signature, bData, uri).encodeABI();
 
     /*
