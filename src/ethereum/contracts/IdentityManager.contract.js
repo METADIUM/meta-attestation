@@ -4,6 +4,7 @@ import { getAddresses } from './addresses';
 import { getBranch, getABI } from './helpers';
 
 export default class IdentityManager {
+
   async init() {
     const { IDENTITY_MANAGER_ADDRESS } = getAddresses(web3config.netid);
     const branch = getBranch(web3config.netid);

@@ -1,15 +1,16 @@
-import web3, { signTx, getTxDataWoNonce } from '../web3';
+import web3, { signABI } from '../web3';
 import web3config from '../web3-config.json';
 import { getBranch, getABI } from './helpers';
 
-const ethUtil = require('ethereumjs-util');
+const eutil = require('ethereumjs-util');
 
 export default class Identity {
+
   async init() {
     const branch = getBranch(web3config.netid);
 
     this.identityAbi = await getABI(branch, 'Identity');
-    this.identityInstance = new web3.eth.Contract(this.identityAbi.abi, web3config.addr);
+    this.identityInstance = new web3.eth.Contract(this.identityAbi.abi, web3config.identity);
   }
 
   /**
@@ -25,18 +26,22 @@ export default class Identity {
     if (! this.identityInstance.methods.claimToSign ||
         ! this.identityInstance.methods.addClaim) return;
 
-    // const bData = ethUtil.hashPersonalMessage(new Buffer(data, 'hex'));
     const bData = Buffer.from(data);
+    const bIssuer = Buffer.from(web3config.identity.substr(2), 'hex');
+    const bTopic = eutil.setLengthLeft(topic, 32);
+
+    const packed = Buffer.concat([bIssuer, bTopic, bData]);
+    const packed32 = eutil.keccak256(packed);
+    const claim = eutil.hashPersonalMessage(packed32);
     
-    const claim = this.identityInstance.methods.claimToSign(web3config.addr, topic, bData).encodeABI();
-    const signature = ethUtil.keccak256(claim);
-    // const signature = signTx(getTxDataWoNonce(addr, claim));
+    const { r, s, v } =  eutil.ecsign(claim, Buffer.from(web3config.privkey, 'hex'));
+    const bV = new Buffer(1);
+    bV[0] = v;
+    const signature = Buffer.concat([r, s, bV]);
+
     return this.identityInstance.methods.addClaim(topic, scheme, web3config.addr, signature, bData, uri).encodeABI();
 
-    /*
-    const { r, s, v } = sign(data);
-    const signature = Buffer.concat([new Buffer(r), new Buffer(s), new Buffer(v)]);
-    return this.identityInstance.methods.addClaim(topic, scheme, web3config.addr, signature, new Buffer(data, 'hex'), uri).encodeABI();
-    */
+    // const claim = this.identityInstance.methods.claimToSign(web3config.addr, topic, bData).encodeABI();
+    // const { r, s, v } = signABI(claim);
   }
 }

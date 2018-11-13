@@ -36,7 +36,7 @@ const firebaseConfig = require('./firebase-config.json').result;
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 // Web3.
-import web3, { sendTransaction } from './ethereum/web3';
+import { sendTransaction } from './ethereum/web3';
 import web3config from './ethereum/web3-config.json';
 
 // Contracts.
@@ -91,7 +91,7 @@ class App extends React.Component {
     'handleCodeInApp': true // This must be true.
   };
 
-  attest(topic, data) {
+  async attest(topic, data) {
     var addr = window.localStorage.getItem('reqAddr');
     if (! addr) {
       return;
@@ -103,7 +103,7 @@ class App extends React.Component {
       scheme: 1,
       data: data,
       uri: 'attestation'
-    }));
+    }), () => firebaseApp.auth().signOut());
   }
 
   // NOTE: URL encryption is needed to security?
@@ -163,12 +163,12 @@ class App extends React.Component {
   async initContracts() {
     await getContractsAddresses(web3config.netid);
     Promise.all(Object.values(this.contracts).map(async (contract) => { await contract.init() }))
-      .then(() => { this.setState({ contractReady: true }) });
+      .then(() => this.setState({ contractReady: true }) );
   }
 
   constructor(props) {
     super(props);
-    console.log('v1.0.1');
+    console.log('v1.0.6');
     this.isSignInWithEmailLink();
     this.initContracts();
   }
@@ -225,21 +225,23 @@ class App extends React.Component {
   componentDidMount() {
     this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
       this.setState({ isSignedIn: !!user });
-      if (!user || !user.providerData) return;
 
-      // console.log('user', user.providerData[0].providerId);
+      if (! user || ! user.providerData) return;
+      
       // providerId: github.com || google.com || phone
-
+      var topic, data;
       switch (user.providerData[0].providerId) {
         // In case of github auth
         case 'github.com':
-          this.attest(3, user.email);
+          topic = 3;
+          data = user.email;
           break;
 
         // In case of phone auth
         case 'phone':
           if (true /* this.reqPhoneNo && this.reqPhoneNo == user.phoneNumber */) {
-            this.attest(20, user.phoneNumber);
+            topic = 20;
+            data = user.phoneNumber;
           } else {
             // Because of authentication with different phone number,
             // send fail response through URI
@@ -250,9 +252,12 @@ class App extends React.Component {
         // In case of email auth
         case 'google.com':
         default:
-          this.attest(30, user.email);
+          topic = 30;
+          data = user.email;
           break;
       }
+
+      if (topic && data) this.attest(topic, data);
     });
   }
 
