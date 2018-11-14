@@ -38,7 +38,7 @@ export default class Identity {
     bV[0] = v;
     const signature = Buffer.concat([r, s, bV]);
 
-    return this.identityInstance.methods.addClaim(topic, scheme, web3config.addr, signature, bData, uri).encodeABI();
+    return this.identityInstance.methods.addClaim(topic, scheme, web3config.identity, signature, bData, uri).encodeABI();
 
     // const claim = this.identityInstance.methods.claimToSign(web3config.addr, topic, bData).encodeABI();
     // const { r, s, v } = signABI(claim);
