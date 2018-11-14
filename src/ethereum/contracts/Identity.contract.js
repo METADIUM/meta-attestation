@@ -26,7 +26,7 @@ export default class Identity {
     if (! this.identityInstance.methods.addClaim) return;
 
     const bData = Buffer.from(data);
-    const bIssuer = Buffer.from(web3config.identity.substr(2), 'hex');
+    const bIssuer = Buffer.from(addr.substr(2), 'hex');
     const bTopic = eutil.setLengthLeft(topic, 32);
 
     const packed = Buffer.concat([bIssuer, bTopic, bData]);

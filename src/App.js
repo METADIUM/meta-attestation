@@ -168,7 +168,7 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log('v1.0.6');
+    console.log('v1.0.7');
     this.isSignInWithEmailLink();
     this.initContracts();
   }
