@@ -23,8 +23,7 @@ export default class Identity {
    */
   addClaim({ addr, topic, scheme, data, uri }) {
     // Validate ABI
-    if (! this.identityInstance.methods.claimToSign ||
-        ! this.identityInstance.methods.addClaim) return;
+    if (! this.identityInstance.methods.addClaim) return;
 
     const bData = Buffer.from(data);
     const bIssuer = Buffer.from(web3config.identity.substr(2), 'hex');
