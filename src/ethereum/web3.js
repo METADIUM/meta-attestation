@@ -63,11 +63,11 @@ async function sendTransaction(to, data, cb) {
     if (err) return console.log('error', err);
     console.log('txid', result);
 
-    // Send success response through URI
-    window.open('uri://auth/' + result);
-
     // Callback
     cb();
+
+    // Send success response through URI
+    window.location.replace('aa://auth/' + result);
   });
 }
 

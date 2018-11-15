@@ -43,6 +43,8 @@ import web3config from './ethereum/web3-config.json';
 import { getContractsAddresses } from './ethereum/contracts/addresses';
 import Identity from './ethereum/contracts/Identity.contract';
 
+const version = 'v1.0.7';
+
 /**
  * The Splash Page containing the login UI.
  */
@@ -168,7 +170,7 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log('v1.0.7');
+    console.log(version);
     this.isSignInWithEmailLink();
     this.initContracts();
   }
@@ -323,6 +325,7 @@ class App extends React.Component {
             </center>
           </div>
         }
+        <br /><br /><center>{version}</center>
       </div>
     );
   }
