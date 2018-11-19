@@ -3,6 +3,7 @@ import Web3 from 'web3';
  * web3-config.json includes:
  *   - netid
  *   - url
+ *   - ws
  *   - addr
  *   - privkey
  *   - identity
@@ -15,6 +16,7 @@ const Tx = require('ethereumjs-tx');
 const eutil = require('ethereumjs-util');
 
 const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
+const web3ws = new Web3(new Web3.providers.WebsocketProvider(web3config.ws));
 
 // Get TX data without nonce
 function getTxDataWoNonce(to, data) {
@@ -73,6 +75,7 @@ async function sendTransaction(to, data, cb) {
 
 export default web3;
 export {
+  web3ws,
   getTxData,
   getTxDataWoNonce,
   sign,

@@ -44,6 +44,11 @@ import { getContractsAddresses } from './ethereum/contracts/addresses';
 import Identity from './ethereum/contracts/Identity.contract';
 
 const version = 'v1.0.7';
+const topicNo = {
+  'github': 3,
+  'sms': 20,
+  'email': 30,
+};
 
 /**
  * The Splash Page containing the login UI.
@@ -97,6 +102,12 @@ class App extends React.Component {
     var addr = window.localStorage.getItem('reqAddr');
     if (! addr) {
       return;
+    }
+
+    if (topic === topicNo.email) {
+      this.contracts.identity.filterAddClaim(addr, (err, resp) => {
+        if (! err) window.location.replace('aa://auth/' + resp.transactionHash);
+      });
     }
 
     sendTransaction(addr, this.contracts.identity.addClaim({
@@ -165,7 +176,7 @@ class App extends React.Component {
   async initContracts() {
     await getContractsAddresses(web3config.netid);
     Promise.all(Object.values(this.contracts).map(async (contract) => { await contract.init() }))
-      .then(() => this.setState({ contractReady: true }) );
+      .then(() => this.setState({ contractReady: true }));
   }
 
   constructor(props) {
@@ -235,14 +246,14 @@ class App extends React.Component {
       switch (user.providerData[0].providerId) {
         // In case of github auth
         case 'github.com':
-          topic = 3;
+          topic = topicNo.github;
           data = user.email;
           break;
 
         // In case of phone auth
         case 'phone':
           if (true /* this.reqPhoneNo && this.reqPhoneNo == user.phoneNumber */) {
-            topic = 20;
+            topic = topicNo.sms;
             data = user.phoneNumber;
           } else {
             // Because of authentication with different phone number,
@@ -254,7 +265,7 @@ class App extends React.Component {
         // In case of email auth
         case 'google.com':
         default:
-          topic = 30;
+          topic = topicNo.email;
           data = user.email;
           break;
       }
