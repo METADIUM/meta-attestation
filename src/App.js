@@ -123,16 +123,7 @@ class App extends React.Component {
       if (! err) window.location.replace('aa://auth/' + resp.transactionHash);
     });
 
-    firebase.auth().sendSignInLinkToEmail(email.value, this.actionCodeSettings)
-      .then(function() {
-        // The link was successfully sent. Inform the user.
-        // Save the email locally so you don't need to ask the user for it again
-        // if they open the link on the same device.
-        window.localStorage.setItem('emailForSignIn', email.value);
-      })
-      .catch(function(error) {
-        // Some error occurred, you can inspect the code: error.code
-      });
+    firebase.auth().sendSignInLinkToEmail(email.value, this.actionCodeSettings);
   }
 
   isSignInWithEmailLink() {
@@ -140,23 +131,14 @@ class App extends React.Component {
     if (! firebase.auth().isSignInWithEmailLink(window.location.href)) {
       return;
     }
-    // Additional state parameters can also be passed via URL.
-    // This can be used to continue the user's intended action before triggering
-    // the sign-in operation.
-    // Get the email if available. This should be available if the user completes
-    // the flow on the same device where they started it.
-    var email = window.localStorage.getItem('emailForSignIn');
-    if (! email) {
-      // User opened the link on a different device. To prevent session fixation
-      // attacks, ask the user to provide the associated email again. For example:
-      // email = window.prompt('Please provide your email for confirmation');
-      return;
-    }
+    
+    var email = this.data;
+    console.log('isSignInWithEmailLink', email);
+    if (! email) return;
+    
     // The client SDK will parse the code from the link for you.
     firebase.auth().signInWithEmailLink(email, window.location.href)
       .then(function(result) {
-        // Clear email from storage.
-        window.localStorage.removeItem('emailForSignIn');
         // You can access the new user via result.user
         // Additional user info profile not available via:
         // result.additionalUserInfo.profile == null
@@ -179,7 +161,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     console.log(version);
-    this.isSignInWithEmailLink();
     this.initContracts();
   }
 
@@ -233,6 +214,7 @@ class App extends React.Component {
    * @inheritDoc
    */
   componentDidMount() {
+    this.isSignInWithEmailLink();
     this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
       this.setState({ isSignedIn: !!user });
 
