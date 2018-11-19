@@ -100,15 +100,7 @@ class App extends React.Component {
 
   async attest(topic, data) {
     var addr = window.localStorage.getItem('reqAddr');
-    if (! addr) {
-      return;
-    }
-
-    if (topic === topicNo.email) {
-      this.contracts.identity.filterAddClaim(addr, (err, resp) => {
-        if (! err) window.location.replace('aa://auth/' + resp.transactionHash);
-      });
-    }
+    if (! addr) return;
 
     sendTransaction(addr, this.contracts.identity.addClaim({
       addr: addr,
@@ -122,9 +114,14 @@ class App extends React.Component {
   // NOTE: URL encryption is needed to security?
   sendSignInLinkToEmail() {
     var email = document.getElementById('email');
-    if (! email.value) {
-      return;
-    }
+    if (! email.value) return;
+
+    var addr = window.localStorage.getItem('reqAddr');
+    if (! addr) return;
+
+    this.contracts.identity.filterAddClaim(addr, (err, resp) => {
+      if (! err) window.location.replace('aa://auth/' + resp.transactionHash);
+    });
 
     firebase.auth().sendSignInLinkToEmail(email.value, this.actionCodeSettings)
       .then(function() {
