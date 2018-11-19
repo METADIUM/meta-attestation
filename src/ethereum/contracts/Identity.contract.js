@@ -1,4 +1,4 @@
-import web3, { signABI } from '../web3';
+import web3, { web3ws } from '../web3';
 import web3config from '../web3-config.json';
 import { getBranch, getABI } from './helpers';
 
@@ -26,11 +26,10 @@ export default class Identity {
     if (! this.identityInstance.methods.addClaim) return;
 
     const bData = Buffer.from(data);
-    const bIssuer = Buffer.from(addr.substr(2), 'hex');
-    // const bIssuer = Buffer.from(web3config.identity.substr(2), 'hex');
+    const bIssued = Buffer.from(addr.substr(2), 'hex');
     const bTopic = eutil.setLengthLeft(topic, 32);
 
-    const packed = Buffer.concat([bIssuer, bTopic, bData]);
+    const packed = Buffer.concat([bIssued, bTopic, bData]);
     const packed32 = eutil.keccak256(packed);
     const claim = eutil.hashPersonalMessage(packed32);
     
@@ -43,5 +42,24 @@ export default class Identity {
 
     // const claim = this.identityInstance.methods.claimToSign(web3config.addr, topic, bData).encodeABI();
     // const { r, s, v } = signABI(claim);
+  }
+
+  /**
+   * 
+   * @param {addr} string target contract address started with 0x
+   * @param {cb} func callback(error, response)
+   */
+  filterAddClaim(addr, cb) {
+    const targetIdentityInstance = new web3ws.eth.Contract(this.identityAbi.abi, addr);
+    targetIdentityInstance.events.ClaimAdded({
+      filter: { issuer: web3config.identity },
+      fromBlock: 'latest',
+      toBlock: 'latest'
+    }, cb);
+    targetIdentityInstance.events.ClaimChanged({
+      filter: { issuer: web3config.identity },
+      fromBlock: 'latest',
+      toBlock: 'latest'
+    }, cb);
   }
 }
