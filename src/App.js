@@ -43,7 +43,7 @@ import web3config from './ethereum/web3-config.json';
 import { getContractsAddresses } from './ethereum/contracts/addresses';
 import Identity from './ethereum/contracts/Identity.contract';
 
-const version = 'v1.1.0';
+const version = 'v1.1.1';
 const topicNo = {
   'github': 3,
   'sms': 20,
@@ -119,7 +119,7 @@ class App extends React.Component {
     var addr = window.localStorage.getItem('reqAddr');
     if (! addr) return;
 
-    this.contracts.identity.filterAddClaim(addr, (err, resp) => {
+    this.contracts.identity.filterClaimRequested(addr, (err, resp) => {
       if (! err) window.location.replace('aa://auth/' + resp.transactionHash);
     });
 

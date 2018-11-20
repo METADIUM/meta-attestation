@@ -49,14 +49,9 @@ export default class Identity {
    * @param {addr} string target contract address started with 0x
    * @param {cb} func callback(error, response)
    */
-  filterAddClaim(addr, cb) {
+  filterClaimRequested(addr, cb) {
     const targetIdentityInstance = new web3ws.eth.Contract(this.identityAbi.abi, addr);
-    targetIdentityInstance.events.ClaimAdded({
-      filter: { issuer: web3config.identity },
-      fromBlock: 'latest',
-      toBlock: 'latest'
-    }, cb);
-    targetIdentityInstance.events.ClaimChanged({
+    targetIdentityInstance.events.ClaimRequested({
       filter: { issuer: web3config.identity },
       fromBlock: 'latest',
       toBlock: 'latest'
