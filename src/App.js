@@ -43,7 +43,7 @@ import web3config from './ethereum/web3-config.json';
 import { getContractsAddresses } from './ethereum/contracts/addresses';
 import Identity from './ethereum/contracts/Identity.contract';
 
-const version = 'v1.0.7';
+const version = 'v1.1.0';
 const topicNo = {
   'github': 3,
   'sms': 20,
@@ -128,12 +128,9 @@ class App extends React.Component {
 
   isSignInWithEmailLink() {
     // Confirm the link is a sign-in with email link.
-    if (! firebase.auth().isSignInWithEmailLink(window.location.href)) {
-      return;
-    }
+    if (! firebase.auth().isSignInWithEmailLink(window.location.href)) return;
     
     var email = this.data;
-    console.log('isSignInWithEmailLink', email);
     if (! email) return;
     
     // The client SDK will parse the code from the link for you.
