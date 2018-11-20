@@ -43,7 +43,7 @@ import web3config from './ethereum/web3-config.json';
 import { getContractsAddresses } from './ethereum/contracts/addresses';
 import Identity from './ethereum/contracts/Identity.contract';
 
-const version = 'v1.1.1';
+const version = 'v1.1.2';
 const topicNo = {
   github: 3,
   sms: 20,
@@ -55,10 +55,6 @@ const topicNo = {
  * The Splash Page containing the login UI.
  */
 class App extends React.Component {
-
-  data = {
-    isSubemailAuth: false,
-  };
 
   state = {
     isSignedIn: undefined,
@@ -176,7 +172,6 @@ class App extends React.Component {
     for (let i in url) {
       if (url[i].startsWith('email')) {
         isEmailAuth = true;
-        if (url[i].startsWith('email2')) this.data.isSubemailAuth = true;
       } else if (url[i].startsWith('phone')) {
         isPhoneAuth = true;
       } else if (url[i].startsWith('0x')) {
@@ -247,7 +242,7 @@ class App extends React.Component {
         // In case of email auth
         case 'google.com':
         default:
-          if (this.data.isSubemailAuth) topic = topicNo.subEmail;
+          if (window.location.href.includes('email2')) topic = topicNo.subEmail;
           else topic = topicNo.email;
           data = user.email;
           break;
