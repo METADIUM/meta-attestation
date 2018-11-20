@@ -10,4 +10,5 @@
 /public/bundle.js
 /public/bundle.js.map
 /public/*.png
+/build
 *.cache

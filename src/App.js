@@ -45,15 +45,20 @@ import Identity from './ethereum/contracts/Identity.contract';
 
 const version = 'v1.1.1';
 const topicNo = {
-  'github': 3,
-  'sms': 20,
-  'email': 30,
+  github: 3,
+  sms: 20,
+  email: 30,
+  subEmail: 31,
 };
 
 /**
  * The Splash Page containing the login UI.
  */
 class App extends React.Component {
+
+  data = {
+    isSubemailAuth: false,
+  };
 
   state = {
     isSignedIn: undefined,
@@ -171,6 +176,7 @@ class App extends React.Component {
     for (let i in url) {
       if (url[i].startsWith('email')) {
         isEmailAuth = true;
+        if (url[i].startsWith('email2')) this.data.isSubemailAuth = true;
       } else if (url[i].startsWith('phone')) {
         isPhoneAuth = true;
       } else if (url[i].startsWith('0x')) {
@@ -234,14 +240,15 @@ class App extends React.Component {
           } else {
             // Because of authentication with different phone number,
             // send fail response through URI
-            window.open('uri://authfail/' + user.phoneNumber, '_blank');
+            window.replace('uri://authfail/' + user.phoneNumber);
           }
           break;
 
         // In case of email auth
         case 'google.com':
         default:
-          topic = topicNo.email;
+          if (this.data.isSubemailAuth) topic = topicNo.subEmail;
+          else topic = topicNo.email;
           data = user.email;
           break;
       }
