@@ -28,29 +28,34 @@
   align-items: center;
   color: black;
   flex-direction: column;
-  /* font-family: sans-serif; */
+  font-family: 'Roboto', sans-serif;
 }
+
 .signedIn {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
+
 .logo {
   font-size: 16px;
   color: #7AACF8;
   align-items: center;
 }
+
 .logoIcon {
   width: 80%;
   position: relative;
   content: url('../public/images/logo.png');
 }
+
 .caption {
   margin: 20px 0 40px 0;
   font-size: 18px;
   opacity: 0.8;
 }
+
 .skip {
   font-weight:lighter;
   color:white;
@@ -61,18 +66,22 @@
   text-decoration: none;
   cursor: pointer;
 }
+
 .skip:HOVER {
   text-decoration: underline;
 }
+
 .firebaseUi {
   min-width: 250px;
 }
+
 .button {
   cursor: pointer;
   color: blue;
   text-decoration: underline;
   margin-top: 10px;
 }
+
 .emailInput {
   background-color: transparent;
   border: none;
@@ -88,6 +97,7 @@
   top: 50%;
   width: 200px;
 }
+
 .emailBtn {
   width: 200px;
   height: 50px;
@@ -97,13 +107,21 @@
   font-size: 14px;
   position: center;
 }
+
 .emailContent {
   display: flex;
   justify-content: center; /* align horizontal */
   align-items: center; /* align vertical */
 }
+
 .emailIcon {
   width: 15%;
   position: relative;
   content: url('../public/images/email.png');
+}
+
+.emailAlert {
+  font-size: 16px;
+  color: rgb(250, 57, 50);
+  position: center;
 }

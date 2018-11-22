@@ -288,13 +288,20 @@ class App extends React.Component {
                   disabled={true}
                 />
                 <p />
-                <button
-                  className={styles.emailBtn}
-                  type='button'
-                  onClick={() => this.sendSignInLinkToEmail()}
-                >
-                  <div className={styles.emailContent}><img className={styles.emailIcon} />Verify E-mail</div>
-                </button>
+                <center>
+                  <button
+                    className={styles.emailBtn}
+                    type='button'
+                    onClick={() => this.sendSignInLinkToEmail()}
+                  >
+                    <div className={styles.emailContent}><img className={styles.emailIcon} />Verify E-mail</div>
+                  </button>
+                  <p />
+                  <div className={styles.emailAlert}>
+                    If you have not received an email,<br />
+                    please check your spam mailbox
+                  </div>
+                </center>
               </div>
             }
             {this.state.contractReady && this.state.isPhoneAuth &&
