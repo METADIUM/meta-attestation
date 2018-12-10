@@ -16,7 +16,8 @@ const Tx = require('ethereumjs-tx');
 const eutil = require('ethereumjs-util');
 
 const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
-const web3ws = new Web3(new Web3.providers.WebsocketProvider(web3config.ws));
+// const web3ws = new Web3(new Web3.providers.WebsocketProvider(web3config.ws));
+var web3ws;
 
 // Get TX data without nonce
 function getTxDataWoNonce(to, data) {

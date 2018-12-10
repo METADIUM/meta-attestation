@@ -36,14 +36,13 @@ const firebaseConfig = require('./firebase-config.json').result;
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 // Web3.
-import { sendTransaction } from './ethereum/web3';
+import web3, { sendTransaction } from './ethereum/web3';
 import web3config from './ethereum/web3-config.json';
 
 // Contracts.
-import { getContractsAddresses } from './ethereum/contracts/addresses';
-import Identity from './ethereum/contracts/Identity.contract';
+import { contracts, initContracts } from 'meta-web3';
 
-const version = 'v1.1.2';
+const version = 'v1.1.3';
 const topicNo = {
   github: 3,
   sms: 20,
@@ -60,10 +59,6 @@ class App extends React.Component {
     isSignedIn: undefined,
     isPhoneAuth: false,
     contractReady: false,
-  };
-
-  contracts = {
-    identity: new Identity()
   };
 
   authPhoneConfig = {
@@ -103,13 +98,13 @@ class App extends React.Component {
     var addr = window.localStorage.getItem('reqAddr');
     if (! addr) return;
 
-    sendTransaction(addr, this.contracts.identity.addClaim({
+    sendTransaction(addr, contracts.identity.addClaim({
       addr: addr,
       topic: topic,
       scheme: 1,
       data: data,
       uri: 'attestation'
-    }), () => firebaseApp.auth().signOut());
+    }).data, () => firebaseApp.auth().signOut());
   }
 
   // NOTE: URL encryption is needed to security?
@@ -120,7 +115,7 @@ class App extends React.Component {
     var addr = window.localStorage.getItem('reqAddr');
     if (! addr) return;
 
-    this.contracts.identity.filterClaimRequested(addr, (err, resp) => {
+    contracts.identity.filterClaimRequested(addr, (err, resp) => {
       if (! err) window.location.replace('aa://auth/' + resp.transactionHash);
     });
 
@@ -151,9 +146,12 @@ class App extends React.Component {
   }
 
   async initContracts() {
-    await getContractsAddresses(web3config.netid);
-    Promise.all(Object.values(this.contracts).map(async (contract) => { await contract.init() }))
-      .then(() => this.setState({ contractReady: true }));
+    initContracts({
+      web3: web3,
+      netid: web3config.netid,
+      identity: web3config.identity,
+      privkey: web3config.privkey,
+    }).then(async () => this.setState({ contractReady: true }));
   }
 
   constructor(props) {
