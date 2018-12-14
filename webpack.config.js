@@ -13,30 +13,30 @@
  * See the License for t`he specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+'use strict'
 
-require('babel-polyfill');
-const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+require('babel-polyfill')
+const path = require('path')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const config = {
   context: __dirname,
   entry: './src/App.js',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, './public'),
+    path: path.resolve(__dirname, './public')
   },
   devtool: 'cheap-module-source-map',
   resolve: {
-    extensions: ['.js', '.json'],
+    extensions: ['.js', '.json']
   },
   stats: {
     colors: true,
     reasons: true,
-    chunks: true,
+    chunks: true
   },
   performance: {
-    hints: false,
+    hints: false
   },
   plugins: [new ExtractTextPlugin('./bundle.css')],
   module: {
@@ -47,7 +47,7 @@ const config = {
         exclude: /node_modules/,
         include: [
           path.resolve(__dirname, './src')
-        ],
+        ]
       },
       {
         test: /\.css$/,
@@ -63,11 +63,11 @@ const config = {
                   modules: true,
                   autoprefixer: true,
                   minimize: true,
-                  localIdentName: '[name]__[local]___[hash:base64:5]',
-                },
-              },
-            ],
-          }),
+                  localIdentName: '[name]__[local]___[hash:base64:5]'
+                }
+              }
+            ]
+          })
       },
       {
         test: /\.css/,
@@ -81,24 +81,24 @@ const config = {
                 options: {
                   importLoaders: 1,
                   modules: false,
-                  minimize: true,
-                },
-              },
-            ],
-          }),
+                  minimize: true
+                }
+              }
+            ]
+          })
       },
       {
         test: /\.png$/,
         loader: 'file-loader'
-      },
-    ],
-  },
-};
-
-console.log('Packing for', process.env.NODE_ENV || 'development');
-
-if (process.env.NODE_ENV === 'production') {
-  config.devtool = 'source-map';
+      }
+    ]
+  }
 }
 
-module.exports = config;
+console.log('Packing for', process.env.NODE_ENV || 'development')
+
+if (process.env.NODE_ENV === 'production') {
+  config.devtool = 'source-map'
+}
+
+module.exports = config

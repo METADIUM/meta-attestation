@@ -1,26 +1,29 @@
 {
   "scripts": {
     "build": "npm run createfirebaseconf; NODE_ENV=production webpack -p;",
+    "test": "standard --parser babel-eslint",
+    "fix": "standard --parser babel-eslint --fix",
     "createfirebaseconf": "firebase setup:web --json > ./src/firebase-config.json",
     "serve": "firebase serve -o 0.0.0.0"
   },
   "dependencies": {
-    "cryptiles": "^4.1.2",
+    "cryptiles": "^4.1.3",
     "ethereumjs-tx": "^1.3.7",
     "ethereumjs-util": "^6.0.0",
     "firebase": "^5.7.0",
     "macaddress": "^0.2.9",
-    "meta-web3": "^0.2.0",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
+    "meta-web3": "^0.2.1",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "react-firebaseui": "^3.1.2",
     "regenerator-runtime": "^0.12.1",
-    "web3": "^1.0.0-beta.36"
+    "web3": "^1.0.0-beta.37"
   },
   "devDependencies": {
-    "ajv": "^6.5.4",
+    "ajv": "^6.6.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
+    "babel-eslint": "^10.0.1",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-polyfill": "^6.26.0",
@@ -32,8 +35,9 @@
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^2.0.0",
     "firebase-tools": "^6.1.2",
+    "standard": "^12.0.1",
     "style-loader": "^0.21.0",
-    "webpack": "^4.20.2",
+    "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2"
   },
   "private": true
