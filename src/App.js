@@ -14,51 +14,50 @@
  * limitations under the License.
  */
 
-import 'babel-polyfill';
+import 'babel-polyfill'
 
 // React core.
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 // Styles
-import styles from './app.css'; // This uses CSS modules.
-import './firebaseui-styling.global.css'; // Import globally.
+import styles from './app.css' // This uses CSS modules.
+import './firebaseui-styling.global.css' // Import globally.
 
 // Firebase.
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-
-// Get the Firebase config from the auto generated file.
-const firebaseConfig = require('./firebase-config.json').result;
-
-// Instantiate a Firebase app.
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
 // Web3.
-import web3, { sendTransaction } from './ethereum/web3';
-import web3config from './ethereum/web3-config.json';
+import web3, { sendTransaction } from './ethereum/web3'
+import web3config from './ethereum/web3-config.json'
 
 // Contracts.
-import { contracts, initContracts } from 'meta-web3';
+import { contracts, initContracts } from 'meta-web3'
 
-const version = 'v1.1.3';
+// Get the Firebase config from the auto generated file.
+const firebaseConfig = require('./firebase-config.json').result
+
+// Instantiate a Firebase app.
+const firebaseApp = firebase.initializeApp(firebaseConfig)
+
+const version = 'v1.1.3'
 const topicNo = {
   github: 3,
   sms: 20,
   email: 30,
-  subEmail: 31,
-};
+  subEmail: 31
+}
 
 /**
  * The Splash Page containing the login UI.
  */
 class App extends React.Component {
-
   state = {
     isSignedIn: undefined,
     isPhoneAuth: false,
-    contractReady: false,
+    contractReady: false
   };
 
   authPhoneConfig = {
@@ -66,8 +65,8 @@ class App extends React.Component {
     recaptchaParameters: {
       type: 'image', // 'audio' or 'image'
       size: 'normal', // 'normal' or 'invisible' or 'compact'
-      badge: 'bottomleft' //' bottomright' or 'inline' applies to invisible.
-    },
+      badge: 'bottomleft' // ' bottomright' or 'inline' applies to invisible.
+    }
     // defaultCountry: 'KR',
     // defaultNationalNumber: '821012341234',
     // loginHint: '+821023456789',
@@ -80,11 +79,11 @@ class App extends React.Component {
     signInOptions: [
       // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       // firebase.auth.GithubAuthProvider.PROVIDER_ID,
-      this.authPhoneConfig,
+      this.authPhoneConfig
     ],
     callbacks: {
-      signInSuccessWithAuthResult: () => false,
-    },
+      signInSuccessWithAuthResult: () => false
+    }
   };
 
   actionCodeSettings = {
@@ -94,9 +93,9 @@ class App extends React.Component {
     'handleCodeInApp': true // This must be true.
   };
 
-  async attest(topic, data) {
-    var addr = window.localStorage.getItem('reqAddr');
-    if (! addr) return;
+  async attest (topic, data) {
+    var addr = window.localStorage.getItem('reqAddr')
+    if (!addr) return
 
     sendTransaction(addr, contracts.identity.addClaim({
       addr: addr,
@@ -104,92 +103,93 @@ class App extends React.Component {
       scheme: 1,
       data: data,
       uri: 'attestation'
-    }).data, () => firebaseApp.auth().signOut());
+    }).data, () => firebaseApp.auth().signOut())
   }
 
   // NOTE: URL encryption is needed to security?
-  sendSignInLinkToEmail() {
-    var email = document.getElementById('email');
-    if (! email.value) return;
+  sendSignInLinkToEmail () {
+    var email = document.getElementById('email')
+    if (!email.value) return
 
-    var addr = window.localStorage.getItem('reqAddr');
-    if (! addr) return;
+    var addr = window.localStorage.getItem('reqAddr')
+    if (!addr) return
 
     contracts.identity.filterClaimRequested(addr, (err, resp) => {
-      if (! err) window.location.replace('aa://auth/' + resp.transactionHash);
-    });
+      if (!err) window.location.replace('aa://auth/' + resp.transactionHash)
+    })
 
-    firebase.auth().sendSignInLinkToEmail(email.value, this.actionCodeSettings);
+    firebase.auth().sendSignInLinkToEmail(email.value, this.actionCodeSettings)
   }
 
-  isSignInWithEmailLink() {
+  isSignInWithEmailLink () {
     // Confirm the link is a sign-in with email link.
-    if (! firebase.auth().isSignInWithEmailLink(window.location.href)) return;
-    
-    var email = this.data;
-    if (! email) return;
-    
+    if (!firebase.auth().isSignInWithEmailLink(window.location.href)) return
+
+    var email = this.data
+    if (!email) return
+
     // The client SDK will parse the code from the link for you.
     firebase.auth().signInWithEmailLink(email, window.location.href)
-      .then(function(result) {
+      .then(ret => {
         // You can access the new user via result.user
         // Additional user info profile not available via:
         // result.additionalUserInfo.profile == null
         // You can check if the user is new or existing:
         // result.additionalUserInfo.isNewUser
-        this.setState({ isSignedIn: true });
+        this.setState({ isSignedIn: true })
       })
-      .catch(function(error) {
+      .catch(err => {
         // Some error occurred, you can inspect the code: error.code
         // Common errors could be invalid email and invalid or expired OTPs.
-      });
+        console.log(err)
+      })
   }
 
-  async initContracts() {
+  async initContracts () {
     initContracts({
       web3: web3,
       netid: web3config.netid,
       identity: web3config.identity,
-      privkey: web3config.privkey,
-    }).then(async () => this.setState({ contractReady: true }));
+      privkey: web3config.privkey
+    }).then(async () => this.setState({ contractReady: true }))
   }
 
-  constructor(props) {
-    super(props);
-    console.log(version);
-    this.initContracts();
+  constructor (props) {
+    super(props)
+    console.log(version)
+    this.initContracts()
   }
 
   /**
    * @inheritDoc
    */
-  componentWillMount() {
+  componentWillMount () {
     // Store ether address to claim
-    let url = window.location.href.split('/');
-    let isEmailAuth = false, isPhoneAuth = false, existData = false;
+    let url = window.location.href.split('/')
+    let isEmailAuth = false; let isPhoneAuth = false; let existData = false
     for (let i in url) {
       if (url[i].startsWith('email')) {
-        isEmailAuth = true;
+        isEmailAuth = true
       } else if (url[i].startsWith('phone')) {
-        isPhoneAuth = true;
+        isPhoneAuth = true
       } else if (url[i].startsWith('0x')) {
-        let addrNdata = url[i].split('?');
-        if (addrNdata.length === 1) break;
-        this.reqAddr = addrNdata[0];
-        let data = addrNdata[1].split('=');
-        if (data[0] !== 'data') break;
-        this.data = decodeURIComponent(data[1].split('&')[0]);
+        let addrNdata = url[i].split('?')
+        if (addrNdata.length === 1) break
+        this.reqAddr = addrNdata[0]
+        let data = addrNdata[1].split('=')
+        if (data[0] !== 'data') break
+        this.data = decodeURIComponent(data[1].split('&')[0])
         // this.authPhoneConfig.defaultNationalNumber = this.data;
-        this.authPhoneConfig.loginHint = '+' + this.data;
-        existData = true;
-        window.localStorage.setItem('reqAddr', this.reqAddr);
+        this.authPhoneConfig.loginHint = '+' + this.data
+        existData = true
+        window.localStorage.setItem('reqAddr', this.reqAddr)
       }
     }
 
-    if (isEmailAuth && existData) this.setState({ isEmailAuth: true });
-    else if (isPhoneAuth && existData) this.setState({ isPhoneAuth: true });
-    else this.setState({ isEmailAuth: false, isPhoneAuth: false });
-    
+    if (isEmailAuth && existData) this.setState({ isEmailAuth: true })
+    else if (isPhoneAuth && existData) this.setState({ isPhoneAuth: true })
+    else this.setState({ isEmailAuth: false, isPhoneAuth: false })
+
     // For manual phone sign-in
     /*
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
@@ -209,58 +209,60 @@ class App extends React.Component {
   /**
    * @inheritDoc
    */
-  componentDidMount() {
-    this.isSignInWithEmailLink();
+  componentDidMount () {
+    this.isSignInWithEmailLink()
     this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
-      this.setState({ isSignedIn: !!user });
+      this.setState({ isSignedIn: !!user })
 
-      if (! user || ! user.providerData) return;
-      
+      if (!user || !user.providerData) return
+
       // providerId: github.com || google.com || phone
-      var topic, data;
+      var topic, data
       switch (user.providerData[0].providerId) {
         // In case of github auth
         case 'github.com':
-          topic = topicNo.github;
-          data = user.email;
-          break;
+          topic = topicNo.github
+          data = user.email
+          break
 
         // In case of phone auth
         case 'phone':
-          if (true /* this.reqPhoneNo && this.reqPhoneNo == user.phoneNumber */) {
-            topic = topicNo.sms;
-            data = user.phoneNumber;
+          // if (this.reqPhoneNo && this.reqPhoneNo == user.phoneNumber) {
+          topic = topicNo.sms
+          data = user.phoneNumber
+          /*
           } else {
             // Because of authentication with different phone number,
             // send fail response through URI
-            window.replace('uri://authfail/' + user.phoneNumber);
+            window.replace('uri://authfail/' + user.phoneNumber)
           }
-          break;
+          */
+          break
 
         // In case of email auth
         case 'google.com':
         default:
-          if (window.location.href.includes('email2')) topic = topicNo.subEmail;
-          else topic = topicNo.email;
-          data = user.email;
-          break;
+          if (window.location.href.includes('email2')) topic = topicNo.subEmail
+          else topic = topicNo.email
+          data = user.email
+          break
       }
 
-      if (topic && data) this.attest(topic, data);
-    });
+      if (topic && data) this.attest(topic, data)
+    })
   }
 
   /**
    * @inheritDoc
    */
-  componentWillUnmount() {
-    this.unregisterAuthObserver();
+  componentWillUnmount () {
+    this.unregisterAuthObserver()
   }
 
   /**
    * @inheritDoc
    */
-  render() {
+  render () {
     return (
       <div className={styles.container}>
         <div className={styles.logo}>
@@ -270,7 +272,7 @@ class App extends React.Component {
         <p />
         {this.state.isSignedIn !== undefined && !this.state.isSignedIn &&
           <div>
-            {this.state.contractReady && ! this.state.isEmailAuth && ! this.state.isPhoneAuth &&
+            {this.state.contractReady && !this.state.isEmailAuth && !this.state.isPhoneAuth &&
               <div>
                 <h1 style={{ color: 'red' }}>Wrong request</h1>
               </div>
@@ -283,7 +285,7 @@ class App extends React.Component {
                   type='text'
                   value={this.data}
                   placeholder='Put your email address'
-                  disabled={true}
+                  disabled
                 />
                 <p />
                 <center>
@@ -321,9 +323,9 @@ class App extends React.Component {
         }
         <br /><br /><center>{version}</center>
       </div>
-    );
+    )
   }
 }
 
 // Load the app in the browser.
-ReactDOM.render(<App/>, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'))
