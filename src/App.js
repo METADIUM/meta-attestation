@@ -42,7 +42,7 @@ const firebaseConfig = require('./firebase-config.json').result
 // Instantiate a Firebase app.
 const firebaseApp = firebase.initializeApp(firebaseConfig)
 
-const version = 'v1.1.3'
+const version = 'v1.1.4'
 const topicNo = {
   github: 3,
   sms: 20,
@@ -58,7 +58,7 @@ class App extends React.Component {
     isSignedIn: undefined,
     isPhoneAuth: false,
     contractReady: false
-  };
+  }
 
   authPhoneConfig = {
     provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
@@ -72,7 +72,7 @@ class App extends React.Component {
     // loginHint: '+821023456789',
     // whitelistedCountries: ['US', '+82'],
     // blacklistedCountries: ['US', '+44'],
-  };
+  }
 
   uiConfig = {
     signInFlow: 'popup',
@@ -84,14 +84,14 @@ class App extends React.Component {
     callbacks: {
       signInSuccessWithAuthResult: () => false
     }
-  };
+  }
 
   actionCodeSettings = {
     // URL you want to redirect back to. The domain (www.example.com) for this URL
     // must be whitelisted in the Firebase Console.
     'url': window.location.href, // Here we redirect back to this same page.
     'handleCodeInApp': true // This must be true.
-  };
+  }
 
   async attest (topic, data) {
     var addr = window.localStorage.getItem('reqAddr')
@@ -148,7 +148,7 @@ class App extends React.Component {
   async initContracts () {
     initContracts({
       web3: web3,
-      netid: web3config.netid,
+      branch: web3config.netid,
       identity: web3config.identity,
       privkey: web3config.privkey
     }).then(async () => this.setState({ contractReady: true }))
@@ -166,7 +166,9 @@ class App extends React.Component {
   componentWillMount () {
     // Store ether address to claim
     let url = window.location.href.split('/')
-    let isEmailAuth = false; let isPhoneAuth = false; let existData = false
+    let isEmailAuth = false
+    let isPhoneAuth = false
+    let existData = false
     for (let i in url) {
       if (url[i].startsWith('email')) {
         isEmailAuth = true

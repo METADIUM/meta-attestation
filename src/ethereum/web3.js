@@ -62,7 +62,7 @@ function sendSigned (txData, cb) {
 
 async function sendTransaction (to, data, cb) {
   const txData = await getTxData(to, data)
-  sendSigned(signTx(txData), function (err, result) {
+  sendSigned(txData, function (err, result) {
     if (err) return console.log('error', err)
     console.log('txid', result)
 

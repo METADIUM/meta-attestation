@@ -1,5 +1,8 @@
 # Meta attestation
 
+[![License](https://img.shields.io/badge/license-Apache2.0-blue.svg)](https://raw.githubusercontent.com/hexoul/meta-attestation/master/LICENSE)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
 > Attestation sample based on ERC725 and ERC735
 
 ## Web3
@@ -44,8 +47,5 @@ Here is example:
 1. Try out the app by opening [http://localhost:5000](http://localhost:5000) in your browser.
 
 ## Deploy
+
 1. `firebase deploy`
-
-## License
-
-© Google, 2011. Licensed under an [Apache-2](../LICENSE) license.
